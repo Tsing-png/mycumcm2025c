@@ -1,0 +1,134 @@
+\section{问题二的建立与求解}
+
+\subsection{数据驱动的BMI分组}
+
+\subsubsection{选择依据}
+
+不同BMI水平的孕妇，胎儿游离DNA浓度的增长速率存在显著差异，导致NIPT检测达标时间随BMI变化。若对全部孕妇采用统一检测时点，高BMI群体将面临较高的误检风险。因此，需要按BMI水平将孕妇划分为若干组，在每组内分别确定最优检测时点。传统做法依赖临床经验设定固定分界值，缺乏统计支撑。本文采用数据驱动策略，以组内达标时间方差最小化为目标，自动搜索最优分组断点。
+
+\subsubsection{总述}
+
+267名孕妇中，260名在观测期内Y染色体浓度首次达到检测阈值$c=0.04$（即4\%），据此定义经验达标时间$T^*$。对$T^*$关于BMI建立\textbf{Huber稳健回归}模型，在候选断点空间中穷举搜索，以BIC准则同时确定分组数目与断点位置。
+
+\subsubsection{求解步骤}
+
+\textbf{Step 1\quad 经验达标时间提取。}对每位孕妇的纵向浓度序列，取Y染色体浓度首次满足$\hat{y}(t) \geq 0.04$的孕周作为该患者的经验达标时间$T^*$。267名孕妇中有260名在观测窗口内达标，后续分析基于这260条记录。
+
+\textbf{Step 2\quad 稳健回归建模。}以BMI为自变量，$T^*$为因变量，拟合二次稳健回归模型
+\begin{equation}\label{eq:robust_reg}
+  T^* = \beta_0 + \beta_1 \cdot \mathrm{BMI} + \beta_2 \cdot \mathrm{BMI}^2,
+\end{equation}
+采用Huber M-估计量以降低离群点的影响。图~\ref{fig:threshold_bmi}展示了$T^*$随BMI的变化趋势与拟合曲线。
+
+\textbf{Step 3\quad 穷举断点搜索。}在BMI$\in[24,44]$范围内以步长1.0枚举所有候选断点组合，约束每组BMI宽度不少于3.0个单位、每组样本量不少于5人。对每种分组方案，计算组内$T^*$的加权方差，并以BIC准则评价模型复杂度与拟合优度的平衡。
+
+\textbf{Step 4\quad 最优分组确定。}BIC最小方案对应两个断点BMI$=30$与BMI$=36$，将孕妇分为3组。与临床经验5组方案（断点20/28/32/36/40）相比，数据驱动3组方案的BIC更优，表明额外分组并未带来实质性的组内方差下降。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{Q2/experiments/round1/figures/M1_threshold_time_vs_bmi.png}
+  \caption{经验达标时间$T^*$与BMI的关系及稳健回归拟合曲线，竖线标注最优断点}\label{fig:threshold_bmi}
+\end{figure}
+
+\subsection{风险函数的建立}
+
+\subsubsection{选择依据}
+
+NIPT检测时点的选择涉及两类相互竞争的风险。检测过早，胎儿游离DNA浓度尚未充分积累，检测准确性不足；检测过晚，则延误临床干预窗口。需要构造统一的风险函数，将两类风险量化并加权求和，为后续最优时点求解提供目标函数。
+
+\subsubsection{总述}
+
+定义总风险函数为延迟风险与不准确风险的加权和，其中不准确风险基于问题一的GAMM预测值与残差标准差，通过正态累积分布函数刻画浓度低于阈值的概率。
+
+\subsubsection{模型构建}
+
+总风险函数定义为
+\begin{equation}\label{eq:total_risk}
+  R(t,\mathrm{BMI}) = w_d \cdot R_{\text{delay}}(t) + w_a \cdot R_{\text{inacc}}(t,\mathrm{BMI}),
+\end{equation}
+其中$w_d=0.4$，$w_a=0.6$，反映临床实践中检测准确性的优先级高于时效性。
+
+延迟风险采用Sigmoid函数建模
+\begin{equation}\label{eq:delay_risk}
+  R_{\text{delay}}(t) = \frac{1}{1+e^{-0.5(t-18)}},
+\end{equation}
+该函数在孕18周附近快速上升，刻画了超过常规检测窗口后临床干预机会急剧减少的特征。
+
+不准确风险基于GAMM预测浓度$\hat{y}(t,\mathrm{BMI})$与残差标准差$\sigma_\varepsilon=0.0101$，通过标准正态累积分布函数$\Phi$计算浓度低于检测阈值$c=0.04$的概率
+\begin{equation}\label{eq:inacc_risk}
+  R_{\text{inacc}}(t,\mathrm{BMI}) = \Phi\!\left(\frac{c - \hat{y}(t,\mathrm{BMI})}{\sigma_\varepsilon}\right).
+\end{equation}
+
+当预测浓度远高于阈值时，$R_{\text{inacc}}$趋近于0；当预测浓度接近或低于阈值时，$R_{\text{inacc}}$迅速增大。图~\ref{fig:risk_analysis}展示了两类风险分量及总风险随孕周的变化。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{Q2/experiments/round1/figures/M1_risk_function_analysis.png}
+  \caption{各BMI组的风险函数分析，延迟风险、不准确风险及总风险随孕周的变化}\label{fig:risk_analysis}
+\end{figure}
+
+\subsection{最优检测时点求解}
+
+\subsubsection{选择依据}
+
+风险函数$R(t,\mathrm{BMI})$在孕周$t$上呈现先降后升的"U形"结构，早期以不准确风险为主导，晚期以延迟风险为主导。两类风险的交汇区域对应总风险最低的检测窗口，该最低点即为各组的最优检测时点。
+
+\subsubsection{求解方法}
+
+对第$g$组，取该组BMI均值$\overline{\mathrm{BMI}}_g$代入风险函数，在孕周区间$[10,25]$上求解单变量有界优化问题
+\begin{equation}\label{eq:opt_time}
+  T_g^* = \arg\min_{t\in[10,25]} R(t,\,\overline{\mathrm{BMI}}_g),
+\end{equation}
+使用Brent方法（scipy.optimize.minimize\_scalar）进行精确求解。
+
+\subsubsection{求解结果}
+
+三组的最优检测时点及对应风险值列于表~\ref{tab:opt_results}。
+
+\begin{table}[H]
+  \centering
+  \caption{各BMI组最优检测时点与风险值}\label{tab:opt_results}
+  \begin{tabular}{cccccc}
+    \toprule
+    组别 & BMI范围 & 样本量 & BMI均值 & 最优孕周 & 最小风险 \\
+    \midrule
+    G1 & $[20.7,\,30.0)$ & 76  & 28.9 & 11.72 & 0.0208 \\
+    G2 & $[30.0,\,36.0)$ & 171 & 32.3 & 11.80 & 0.0218 \\
+    G3 & $[36.0,\,46.9)$ & 20  & 38.4 & 13.49 & 0.0675 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+G1与G2组的最优时点十分接近（约11.7$\sim$11.8周），最小风险均低于0.025，表明中低BMI孕妇在孕12周前即可获得高置信度的检测结果。G3组（BMI$\geq$36）的最优时点推迟至13.49周，最小风险升高至0.0675，约为前两组的3倍。这一差异源于高BMI孕妇的母体游离DNA对胎儿DNA的强稀释效应，使浓度达标时间整体后移。
+
+经验达标时间的中位数（G1为12.79周、G2为12.71周、G3为16.00周）均晚于模型给出的最优时点，说明基于风险函数的最优解能够在保证准确性的前提下提前检测窗口。
+
+\subsection{检测误差敏感性分析}
+
+\subsubsection{分析目的}
+
+实际检测中，仪器精度与样本处理过程均可能引入系统偏差或随机噪声。需要评估当检测阈值发生偏移或残差方差增大时，各组最优时点与最小风险的稳定性。
+
+\subsubsection{扰动设计}
+
+设置两类扰动实验。
+
+（1）阈值偏移。将检测阈值$c$分别上调0.5\%、1\%、2\%（即$c=0.045$、$0.05$、$0.06$），模拟系统性测量偏差对结果的影响。
+
+（2）噪声膨胀。将残差标准差$\sigma_\varepsilon$分别放大至1.5倍、2倍、3倍（即$\sigma_\varepsilon=0.0152$、$0.0202$、$0.0303$），模拟随机误差增大的场景。
+
+\subsubsection{敏感性结果}
+
+图~\ref{fig:sensitivity}展示了各组在不同扰动水平下的风险响应。G1和G2组在所有扰动条件下，最优时点偏移不超过0.5周，最小风险增幅有限，表现出良好的鲁棒性。G3组对两类扰动均表现出显著敏感性，当噪声放大至3倍时，最小风险超过0.15，最优时点进一步推迟。这一结果与高BMI组本身信噪比偏低的物理机制一致，浓度预测的不确定性在高BMI区间被放大。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{Q2/experiments/round1/figures/M1_error_sensitivity.png}
+  \caption{检测误差敏感性分析，阈值偏移与噪声膨胀对各组风险的影响}\label{fig:sensitivity}
+\end{figure}
+
+作为对照，基于临床经验的5组方案（M2，断点为BMI$=$20/28/32/36/40）给出的最优检测时点分布在11.65$\sim$14.65周之间，趋势与数据驱动方案一致，但额外的分组未能带来风险的显著降低，验证了BIC准则选择3组方案的合理性。
+
+\subsection{实际意义}
+
+上述结果为临床NIPT检测方案的制定提供了量化参考。BMI低于30的孕妇（占样本的28.5\%）和BMI在30$\sim$36之间的孕妇（占64.0\%）可在孕11$\sim$12周安全接受检测，风险水平低于0.025。BMI超过36的孕妇（占7.5\%）应将检测时点推迟至约13.5周，且临床解读时需充分考虑该群体面临的较高检测不确定性。对于高BMI孕妇，在条件允许的情况下可考虑重复采样或联合其他产前筛查手段，以弥补单次NIPT信噪比不足带来的风险。

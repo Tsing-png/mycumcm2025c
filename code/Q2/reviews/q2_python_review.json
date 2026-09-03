@@ -1,0 +1,40 @@
+{
+  "question": "Q2",
+  "round": 1,
+  "language": "python",
+  "reviewed_files": ["code/Q2/q2_main.py"],
+  "checks": {
+    "syntax": {
+      "status": "PASS",
+      "evidence": "Script ran to completion on Python 3.14.5, all 8 steps completed without errors."
+    },
+    "input_contract": {
+      "status": "PASS",
+      "evidence": "Reads male_cleaned.csv with utf-8-sig; renames columns by position index (robust to encoding); dropna on required columns; patient as str. 1082 rows, 267 patients."
+    },
+    "method_alignment": {
+      "status": "PASS",
+      "evidence": "M1 implements approved pipeline: (1) refit Q1 GAMM for continuous prediction, (2) per-patient empirical threshold time extraction, (3) robust regression T*(BMI) with Huber M-estimator, (4) BIC-optimal segmented grouping over candidate breakpoints with min-width/min-count constraints, (5) decisional risk function R(t,BMI) = 0.4*sigmoid_delay + 0.6*normal_cdf_inaccuracy with bounded optimization. M2 implements clinical reference grouping baseline. Error sensitivity covers threshold shift (0-2%) and noise inflation (1x-3x)."
+    },
+    "reproducibility": {
+      "status": "PASS",
+      "evidence": "SEED=42 globally. scipy.optimize.minimize_scalar with bounded method is deterministic. BIC grid search over candidate breakpoints is exhaustive and reproducible. Environment recorded."
+    },
+    "output_contract": {
+      "status": "PASS",
+      "evidence": "run_summary.json contains: question, round, decision_id, methods with key_results (groups/breakpoints), risk_function, error_sensitivity, seed, environment, inputs, outputs, degeneracy_check, fallback_trigger, warnings, errors. 5 figures, 3 tables, 1 metrics JSON saved."
+    }
+  },
+  "issues": [
+    {
+      "severity": "info",
+      "description": "Column renaming uses positional index (cols[1], cols[9], etc.) rather than Chinese column names. Works but fragile if column order changes. Q1/Q3 use explicit Chinese names which is more robust."
+    },
+    {
+      "severity": "info",
+      "description": "Risk function weights (w_delay=0.4, w_inaccuracy=0.6) are hardcoded. Sensitivity to these weights is not explicitly tested, though the error sensitivity section partially covers this via noise inflation."
+    }
+  ],
+  "verdict": "PASS",
+  "reviewed_at": "2026-09-03T00:00:00Z"
+}

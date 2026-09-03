@@ -1,0 +1,747 @@
+{
+  "question": "Q2",
+  "robustness_checks": [
+    {
+      "check": "bmi_breakpoint_sensitivity",
+      "claim": "Optimal NIPT timing is stable under ±2 BMI breakpoint shifts",
+      "perturbation": "bp1 in [28,32], bp2 in [34,38], step=1",
+      "n_tested": 24,
+      "max_week_diff_range": [
+        0.0,
+        0.74
+      ],
+      "results": [
+        {
+          "bp1": 28.0,
+          "bp2": 34.0,
+          "delta1": -2,
+          "delta2": -2,
+          "n_groups": 3,
+          "group_sizes": [
+            5,
+            207,
+            48
+          ],
+          "optimal_weeks": [
+            12.4,
+            11.66,
+            12.75
+          ],
+          "min_risks": [
+            0.0314,
+            0.0201,
+            0.0396
+          ],
+          "max_week_diff_vs_ref": 0.74
+        },
+        {
+          "bp1": 28.0,
+          "bp2": 35.0,
+          "delta1": -2,
+          "delta2": -1,
+          "n_groups": 3,
+          "group_sizes": [
+            5,
+            223,
+            32
+          ],
+          "optimal_weeks": [
+            12.4,
+            11.68,
+            13.06
+          ],
+          "min_risks": [
+            0.0314,
+            0.0203,
+            0.0492
+          ],
+          "max_week_diff_vs_ref": 0.68
+        },
+        {
+          "bp1": 28.0,
+          "bp2": 36.0,
+          "delta1": -2,
+          "delta2": 0,
+          "n_groups": 3,
+          "group_sizes": [
+            5,
+            236,
+            19
+          ],
+          "optimal_weeks": [
+            12.4,
+            11.69,
+            13.49
+          ],
+          "min_risks": [
+            0.0314,
+            0.0205,
+            0.0675
+          ],
+          "max_week_diff_vs_ref": 0.68
+        },
+        {
+          "bp1": 28.0,
+          "bp2": 37.0,
+          "delta1": -2,
+          "delta2": 1,
+          "n_groups": 3,
+          "group_sizes": [
+            5,
+            241,
+            14
+          ],
+          "optimal_weeks": [
+            12.4,
+            11.7,
+            13.74
+          ],
+          "min_risks": [
+            0.0314,
+            0.0206,
+            0.0823
+          ],
+          "max_week_diff_vs_ref": 0.68
+        },
+        {
+          "bp1": 28.0,
+          "bp2": 38.0,
+          "delta1": -2,
+          "delta2": 2,
+          "n_groups": 3,
+          "group_sizes": [
+            5,
+            245,
+            10
+          ],
+          "optimal_weeks": [
+            12.4,
+            11.71,
+            14.0
+          ],
+          "min_risks": [
+            0.0314,
+            0.0207,
+            0.1024
+          ],
+          "max_week_diff_vs_ref": 0.68
+        },
+        {
+          "bp1": 29.0,
+          "bp2": 34.0,
+          "delta1": -1,
+          "delta2": -2,
+          "n_groups": 3,
+          "group_sizes": [
+            33,
+            179,
+            48
+          ],
+          "optimal_weeks": [
+            11.83,
+            11.68,
+            12.75
+          ],
+          "min_risks": [
+            0.0222,
+            0.0204,
+            0.0396
+          ],
+          "max_week_diff_vs_ref": 0.74
+        },
+        {
+          "bp1": 29.0,
+          "bp2": 35.0,
+          "delta1": -1,
+          "delta2": -1,
+          "n_groups": 3,
+          "group_sizes": [
+            33,
+            195,
+            32
+          ],
+          "optimal_weeks": [
+            11.83,
+            11.7,
+            13.06
+          ],
+          "min_risks": [
+            0.0222,
+            0.0206,
+            0.0492
+          ],
+          "max_week_diff_vs_ref": 0.43
+        },
+        {
+          "bp1": 29.0,
+          "bp2": 36.0,
+          "delta1": -1,
+          "delta2": 0,
+          "n_groups": 3,
+          "group_sizes": [
+            33,
+            208,
+            19
+          ],
+          "optimal_weeks": [
+            11.83,
+            11.73,
+            13.49
+          ],
+          "min_risks": [
+            0.0222,
+            0.0209,
+            0.0675
+          ],
+          "max_week_diff_vs_ref": 0.11
+        },
+        {
+          "bp1": 29.0,
+          "bp2": 37.0,
+          "delta1": -1,
+          "delta2": 1,
+          "n_groups": 3,
+          "group_sizes": [
+            33,
+            213,
+            14
+          ],
+          "optimal_weeks": [
+            11.83,
+            11.74,
+            13.74
+          ],
+          "min_risks": [
+            0.0222,
+            0.021,
+            0.0823
+          ],
+          "max_week_diff_vs_ref": 0.25
+        },
+        {
+          "bp1": 29.0,
+          "bp2": 38.0,
+          "delta1": -1,
+          "delta2": 2,
+          "n_groups": 3,
+          "group_sizes": [
+            33,
+            217,
+            10
+          ],
+          "optimal_weeks": [
+            11.83,
+            11.75,
+            14.0
+          ],
+          "min_risks": [
+            0.0222,
+            0.0212,
+            0.1024
+          ],
+          "max_week_diff_vs_ref": 0.51
+        },
+        {
+          "bp1": 30.0,
+          "bp2": 34.0,
+          "delta1": 0,
+          "delta2": -2,
+          "n_groups": 3,
+          "group_sizes": [
+            76,
+            136,
+            48
+          ],
+          "optimal_weeks": [
+            11.72,
+            11.73,
+            12.75
+          ],
+          "min_risks": [
+            0.0208,
+            0.0209,
+            0.0396
+          ],
+          "max_week_diff_vs_ref": 0.74
+        },
+        {
+          "bp1": 30.0,
+          "bp2": 35.0,
+          "delta1": 0,
+          "delta2": -1,
+          "n_groups": 3,
+          "group_sizes": [
+            76,
+            152,
+            32
+          ],
+          "optimal_weeks": [
+            11.72,
+            11.76,
+            13.06
+          ],
+          "min_risks": [
+            0.0208,
+            0.0213,
+            0.0492
+          ],
+          "max_week_diff_vs_ref": 0.43
+        },
+        {
+          "bp1": 30.0,
+          "bp2": 36.0,
+          "delta1": 0,
+          "delta2": 0,
+          "n_groups": 3,
+          "group_sizes": [
+            76,
+            165,
+            19
+          ],
+          "optimal_weeks": [
+            11.72,
+            11.8,
+            13.49
+          ],
+          "min_risks": [
+            0.0208,
+            0.0218,
+            0.0675
+          ],
+          "max_week_diff_vs_ref": 0.0
+        },
+        {
+          "bp1": 30.0,
+          "bp2": 37.0,
+          "delta1": 0,
+          "delta2": 1,
+          "n_groups": 3,
+          "group_sizes": [
+            76,
+            170,
+            14
+          ],
+          "optimal_weeks": [
+            11.72,
+            11.81,
+            13.74
+          ],
+          "min_risks": [
+            0.0208,
+            0.022,
+            0.0823
+          ],
+          "max_week_diff_vs_ref": 0.25
+        },
+        {
+          "bp1": 30.0,
+          "bp2": 38.0,
+          "delta1": 0,
+          "delta2": 2,
+          "n_groups": 3,
+          "group_sizes": [
+            76,
+            174,
+            10
+          ],
+          "optimal_weeks": [
+            11.72,
+            11.83,
+            14.0
+          ],
+          "min_risks": [
+            0.0208,
+            0.0222,
+            0.1024
+          ],
+          "max_week_diff_vs_ref": 0.51
+        },
+        {
+          "bp1": 31.0,
+          "bp2": 34.0,
+          "delta1": 1,
+          "delta2": -2,
+          "n_groups": 3,
+          "group_sizes": [
+            122,
+            90,
+            48
+          ],
+          "optimal_weeks": [
+            11.67,
+            11.82,
+            12.75
+          ],
+          "min_risks": [
+            0.0203,
+            0.022,
+            0.0396
+          ],
+          "max_week_diff_vs_ref": 0.74
+        },
+        {
+          "bp1": 31.0,
+          "bp2": 35.0,
+          "delta1": 1,
+          "delta2": -1,
+          "n_groups": 3,
+          "group_sizes": [
+            122,
+            106,
+            32
+          ],
+          "optimal_weeks": [
+            11.67,
+            11.86,
+            13.06
+          ],
+          "min_risks": [
+            0.0203,
+            0.0226,
+            0.0492
+          ],
+          "max_week_diff_vs_ref": 0.43
+        },
+        {
+          "bp1": 31.0,
+          "bp2": 36.0,
+          "delta1": 1,
+          "delta2": 0,
+          "n_groups": 3,
+          "group_sizes": [
+            122,
+            119,
+            19
+          ],
+          "optimal_weeks": [
+            11.67,
+            11.91,
+            13.49
+          ],
+          "min_risks": [
+            0.0203,
+            0.0233,
+            0.0675
+          ],
+          "max_week_diff_vs_ref": 0.11
+        },
+        {
+          "bp1": 31.0,
+          "bp2": 37.0,
+          "delta1": 1,
+          "delta2": 1,
+          "n_groups": 3,
+          "group_sizes": [
+            122,
+            124,
+            14
+          ],
+          "optimal_weeks": [
+            11.67,
+            11.94,
+            13.74
+          ],
+          "min_risks": [
+            0.0203,
+            0.0237,
+            0.0823
+          ],
+          "max_week_diff_vs_ref": 0.25
+        },
+        {
+          "bp1": 31.0,
+          "bp2": 38.0,
+          "delta1": 1,
+          "delta2": 2,
+          "n_groups": 3,
+          "group_sizes": [
+            122,
+            128,
+            10
+          ],
+          "optimal_weeks": [
+            11.67,
+            11.96,
+            14.0
+          ],
+          "min_risks": [
+            0.0203,
+            0.024,
+            0.1024
+          ],
+          "max_week_diff_vs_ref": 0.51
+        },
+        {
+          "bp1": 32.0,
+          "bp2": 35.0,
+          "delta1": 2,
+          "delta2": -1,
+          "n_groups": 3,
+          "group_sizes": [
+            150,
+            78,
+            32
+          ],
+          "optimal_weeks": [
+            11.66,
+            11.94,
+            13.06
+          ],
+          "min_risks": [
+            0.02,
+            0.0237,
+            0.0492
+          ],
+          "max_week_diff_vs_ref": 0.43
+        },
+        {
+          "bp1": 32.0,
+          "bp2": 36.0,
+          "delta1": 2,
+          "delta2": 0,
+          "n_groups": 3,
+          "group_sizes": [
+            150,
+            91,
+            19
+          ],
+          "optimal_weeks": [
+            11.66,
+            12.01,
+            13.49
+          ],
+          "min_risks": [
+            0.02,
+            0.0247,
+            0.0675
+          ],
+          "max_week_diff_vs_ref": 0.21
+        },
+        {
+          "bp1": 32.0,
+          "bp2": 37.0,
+          "delta1": 2,
+          "delta2": 1,
+          "n_groups": 3,
+          "group_sizes": [
+            150,
+            96,
+            14
+          ],
+          "optimal_weeks": [
+            11.66,
+            12.04,
+            13.74
+          ],
+          "min_risks": [
+            0.02,
+            0.0251,
+            0.0823
+          ],
+          "max_week_diff_vs_ref": 0.25
+        },
+        {
+          "bp1": 32.0,
+          "bp2": 38.0,
+          "delta1": 2,
+          "delta2": 2,
+          "n_groups": 3,
+          "group_sizes": [
+            150,
+            100,
+            10
+          ],
+          "optimal_weeks": [
+            11.66,
+            12.07,
+            14.0
+          ],
+          "min_risks": [
+            0.02,
+            0.0256,
+            0.1024
+          ],
+          "max_week_diff_vs_ref": 0.51
+        }
+      ],
+      "status": "PASS",
+      "limitation": "Only tested integer shifts around data-driven breakpoints"
+    },
+    {
+      "check": "risk_weight_sensitivity",
+      "claim": "Optimal timing is moderately sensitive to risk weight allocation",
+      "perturbation": "w_delay in [0.2, 0.7], w_inaccuracy = 1 - w_delay",
+      "results": [
+        {
+          "w_delay": 0.2,
+          "w_inaccuracy": 0.8,
+          "optimal_weeks": [
+            12.11,
+            12.2,
+            14.23
+          ],
+          "min_risks": [
+            0.0128,
+            0.0135,
+            0.0536
+          ]
+        },
+        {
+          "w_delay": 0.3,
+          "w_inaccuracy": 0.7,
+          "optimal_weeks": [
+            11.9,
+            11.97,
+            13.81
+          ],
+          "min_risks": [
+            0.0171,
+            0.0179,
+            0.0618
+          ]
+        },
+        {
+          "w_delay": 0.4,
+          "w_inaccuracy": 0.6,
+          "optimal_weeks": [
+            11.72,
+            11.8,
+            13.49
+          ],
+          "min_risks": [
+            0.0208,
+            0.0218,
+            0.0675
+          ]
+        },
+        {
+          "w_delay": 0.5,
+          "w_inaccuracy": 0.5,
+          "optimal_weeks": [
+            11.56,
+            11.63,
+            13.21
+          ],
+          "min_risks": [
+            0.024,
+            0.025,
+            0.071
+          ]
+        },
+        {
+          "w_delay": 0.6,
+          "w_inaccuracy": 0.4,
+          "optimal_weeks": [
+            11.41,
+            11.47,
+            12.94
+          ],
+          "min_risks": [
+            0.0266,
+            0.0276,
+            0.0725
+          ]
+        },
+        {
+          "w_delay": 0.7,
+          "w_inaccuracy": 0.3,
+          "optimal_weeks": [
+            11.24,
+            11.3,
+            12.65
+          ],
+          "min_risks": [
+            0.0285,
+            0.0295,
+            0.0715
+          ]
+        }
+      ],
+      "g1_week_range": 0.87,
+      "g2_week_range": 0.9,
+      "status": "PASS",
+      "limitation": "Linear weight combinations only; nonlinear risk aggregation not tested"
+    },
+    {
+      "check": "threshold_sensitivity",
+      "claim": "Optimal timing shifts predictably with Y-conc threshold",
+      "perturbation": "threshold in {3.0%, 3.5%, 4.0%, 4.5%, 5.0%}",
+      "results": [
+        {
+          "threshold_pct": 3.0,
+          "optimal_weeks": [
+            11.0,
+            11.0,
+            12.36
+          ],
+          "min_risks": [
+            0.0129,
+            0.0133,
+            0.0307
+          ]
+        },
+        {
+          "threshold_pct": 3.5,
+          "optimal_weeks": [
+            11.27,
+            11.34,
+            12.91
+          ],
+          "min_risks": [
+            0.0161,
+            0.0167,
+            0.0442
+          ]
+        },
+        {
+          "threshold_pct": 4.0,
+          "optimal_weeks": [
+            11.72,
+            11.8,
+            13.49
+          ],
+          "min_risks": [
+            0.0208,
+            0.0218,
+            0.0675
+          ]
+        },
+        {
+          "threshold_pct": 4.5,
+          "optimal_weeks": [
+            12.22,
+            12.3,
+            14.06
+          ],
+          "min_risks": [
+            0.0282,
+            0.0296,
+            0.1076
+          ]
+        },
+        {
+          "threshold_pct": 5.0,
+          "optimal_weeks": [
+            12.77,
+            12.85,
+            14.57
+          ],
+          "min_risks": [
+            0.0401,
+            0.0425,
+            0.1728
+          ]
+        }
+      ],
+      "g1_week_range": 1.77,
+      "status": "PASS",
+      "limitation": "Threshold perturbation does not account for measurement error in threshold itself"
+    }
+  ],
+  "seed": 42,
+  "figures": [
+    "q2_breakpoint_sensitivity.png",
+    "q2_weight_sensitivity.png",
+    "q2_threshold_sensitivity.png"
+  ]
+}

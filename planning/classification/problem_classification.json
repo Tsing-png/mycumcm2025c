@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "subquestions": [
+    {
+      "id": "Q1",
+      "primary_type": "descriptive/inference",
+      "secondary_type": "prediction/estimation",
+      "confidence": "medium",
+      "evidence": [
+        "required_output: 关系模型 + 显著性检验 → 核心是统计关联与假设检验, 属于 descriptive/inference",
+        "constraint: 模型需通过显著性检验 → 验证关联而非预测未来值",
+        "downstream_dependency: Q2/Q3 需要用 Q1 模型预测给定孕周的 Y 染色体浓度 → 模型需具备预测功能, 赋予 secondary prediction/estimation"
+      ],
+      "required_validation": [
+        "数据质量: 重复测量结构(267人平均4次)需处理组内相关性",
+        "多重检验校正",
+        "相关性 vs 因果性边界声明",
+        "模型拟合优度与残差诊断"
+      ],
+      "framing_decision_id": "q1_framing_descriptive_vs_predictive",
+      "risks": [
+        "若仅做描述性关联, Q2/Q3 缺乏可用的预测模型",
+        "若强调预测, 显著性检验的解释权重下降",
+        "'等指标'范围未明确, 变量选择影响模型结构"
+      ]
+    },
+    {
+      "id": "Q2",
+      "primary_type": "optimization/decision",
+      "secondary_type": "classification/clustering",
+      "confidence": "high",
+      "evidence": [
+        "required_output: BMI分组方案 + 每组最佳NIPT时点 + 潜在风险最小化 → 目标函数 + 决策变量 + 约束, 典型优化结构",
+        "constraint: Y染色体浓度达标阈值4%, 检测窗口10-25周 → 硬约束",
+        "secondary: BMI分组本身是 classification/clustering, 但服务于优化目标而非独立产出"
+      ],
+      "required_validation": [
+        "目标函数(潜在风险)的量化定义",
+        "分组方案的稳定性与统计支撑",
+        "约束可行性: 各BMI组在窗口期内能否达标",
+        "检测误差的敏感性分析"
+      ],
+      "framing_decision_id": null,
+      "risks": [
+        "潜在风险量化方式未给出, 需人工定义风险函数",
+        "检测误差含义模糊(浓度测量误差 vs 孕周估计误差)"
+      ]
+    },
+    {
+      "id": "Q3",
+      "primary_type": "optimization/decision",
+      "secondary_type": "classification/clustering",
+      "confidence": "high",
+      "evidence": [
+        "required_output: 与Q2同构但增加多因素和达标比例 → 仍是优化结构",
+        "新增约束: 达标比例(>=4%的群体比例)纳入目标或约束",
+        "多因素(身高/体重/年龄)扩展了特征空间但未改变任务结构"
+      ],
+      "required_validation": [
+        "Q2全部验证项",
+        "多因素贡献的边际检验: 加入身高/体重/年龄后是否实质改善",
+        "达标比例与风险之间的权衡关系",
+        "与Q2结果的对比论证"
+      ],
+      "framing_decision_id": null,
+      "risks": [
+        "达标比例如何与风险权衡是核心 trade-off, 需人工确认",
+        "多因素可能与BMI高度共线, 导致模型不稳定"
+      ]
+    },
+    {
+      "id": "Q4",
+      "primary_type": "classification/clustering",
+      "secondary_type": "descriptive/inference",
+      "confidence": "high",
+      "evidence": [
+        "required_output: 女胎异常的判定方法 → 输出为类别标签(正常/异常), 典型分类任务",
+        "输入特征: Z值/GC含量/读段数/BMI等 → 多特征分类",
+        "secondary: 需理解哪些因素与异常关联(特征重要性分析), 属于 descriptive/inference"
+      ],
+      "required_validation": [
+        "标签定义: AB列(非整倍体)编码确认, 88%+为空即正常 → 严重类别不平衡",
+        "是否对21/18/13号分别判定还是统一判定",
+        "不平衡处理策略",
+        "分类性能指标选择(敏感性/特异性/AUC)",
+        "方法可解释性(临床可接受性)"
+      ],
+      "framing_decision_id": "q4_framing_separate_vs_unified",
+      "risks": [
+        "女胎全部健康(605条100%健康), 正样本极少或为零 → 监督分类可能不可行",
+        "若无真阳性样本, 需转为异常检测或基于规则的阈值方法",
+        "AB列编码含义需从数据确认"
+      ]
+    }
+  ]
+}

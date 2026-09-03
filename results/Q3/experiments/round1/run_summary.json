@@ -1,0 +1,295 @@
+{
+  "question": "Q3",
+  "round": 1,
+  "decision_id": "q3_method_choice",
+  "methods": [
+    {
+      "id": "M1",
+      "role": "main_candidate",
+      "name": "Multi-factor GAMM + residual decomposition",
+      "formula": "y_conc ~ bs(gest_week,df=4) + bs(bmi,df=3) + age + weight_resid + (1+gest_week|patient)",
+      "status": "converged",
+      "time_s": 0.69,
+      "metrics": {
+        "model": "M1_MultiGAMM",
+        "log_likelihood": 2621.21,
+        "n_fe": 10,
+        "n_params": 14,
+        "AIC": -5214.43,
+        "BIC": -5144.62,
+        "RMSE": 0.010091,
+        "MAE": 0.007045
+      },
+      "residual_diagnostics": {
+        "shapiro_stat": 0.943,
+        "shapiro_p": 0.0,
+        "skewness": 0.1242,
+        "kurtosis": 4.1487,
+        "resid_mean": -0.0,
+        "resid_std": 0.010096
+      },
+      "fixed_effects": {
+        "Intercept": 0.025756,
+        "gw_s0": 0.015437,
+        "gw_s1": 0.017271,
+        "gw_s2": 0.043469,
+        "gw_s3": 0.123641,
+        "bmi_s0": 0.101422,
+        "bmi_s1": 0.00999,
+        "bmi_s2": 0.017265,
+        "age": -0.000491,
+        "weight_resid": -0.00102
+      },
+      "random_effects_variance": {
+        "intercept": 0.001895,
+        "gest_week": 8e-06
+      }
+    },
+    {
+      "id": "M2",
+      "role": "usable_baseline",
+      "name": "GAMM + age + BMI:age interaction",
+      "formula": "y_conc ~ bs(gest_week,df=4) + bs(bmi,df=3) + age + bmi*age + (1+gest_week|patient)",
+      "status": "converged",
+      "time_s": 0.71,
+      "metrics": {
+        "model": "M2_BaselineGAMM",
+        "log_likelihood": 2618.35,
+        "n_fe": 10,
+        "n_params": 14,
+        "AIC": -5208.7,
+        "BIC": -5138.89,
+        "RMSE": 0.010076,
+        "MAE": 0.007032
+      },
+      "residual_diagnostics": {
+        "shapiro_stat": 0.9426,
+        "shapiro_p": 0.0,
+        "skewness": 0.1241,
+        "kurtosis": 4.171,
+        "resid_mean": -0.0,
+        "resid_std": 0.010081
+      },
+      "fixed_effects": {
+        "Intercept": 0.044013,
+        "gw_s0": 0.015424,
+        "gw_s1": 0.017367,
+        "gw_s2": 0.043499,
+        "gw_s3": 0.12396,
+        "bmi_s0": 0.084539,
+        "bmi_s1": -0.013377,
+        "bmi_s2": -0.029766,
+        "age": -0.002192,
+        "bmi_age": 5.3e-05
+      },
+      "random_effects_variance": {
+        "intercept": 0.001907,
+        "gest_week": 8e-06
+      }
+    }
+  ],
+  "model_comparison": {
+    "lr_test": {
+      "chi2": 5.72,
+      "df": 0,
+      "p_value": null
+    },
+    "m1_better_aic": true,
+    "m1_better_bic": true
+  },
+  "vif_analysis": {
+    "before_decomposition": [
+      {
+        "variable": "bmi",
+        "VIF": 218.5995912576457
+      },
+      {
+        "variable": "height",
+        "VIF": 106.90491651280095
+      },
+      {
+        "variable": "weight",
+        "VIF": 351.3423093225699
+      },
+      {
+        "variable": "age",
+        "VIF": 1.0119848577145818
+      }
+    ],
+    "after_decomposition": [
+      {
+        "variable": "bmi",
+        "VIF": 1.0000020221270731
+      },
+      {
+        "variable": "age",
+        "VIF": 1.0063989569262566
+      },
+      {
+        "variable": "weight_resid",
+        "VIF": 1.0063969347991837
+      }
+    ],
+    "max_vif_after": 1.01
+  },
+  "bmi_groups": [
+    {
+      "group": "[20,32)",
+      "n": 152,
+      "bmi_mean": 29.9,
+      "optimal_week": 12.8,
+      "compliance_rate": 0.753,
+      "min_risk": 0.1874
+    },
+    {
+      "group": "[32,36)",
+      "n": 95,
+      "bmi_mean": 33.6,
+      "optimal_week": 13.3,
+      "compliance_rate": 0.748,
+      "min_risk": 0.2001
+    },
+    {
+      "group": "[36,40)",
+      "n": 16,
+      "bmi_mean": 37.7,
+      "optimal_week": 13.3,
+      "compliance_rate": 0.67,
+      "min_risk": 0.2563
+    },
+    {
+      "group": "[40,+inf)",
+      "n": 4,
+      "bmi_mean": 43.3,
+      "optimal_week": 24.8,
+      "compliance_rate": 0.95,
+      "min_risk": 0.3294
+    }
+  ],
+  "mc_error_analysis": {
+    "n_iterations": 500,
+    "sigma_meas": 0.010096,
+    "results": [
+      {
+        "group": "[20,32)",
+        "optimal_week_mean": 13.02,
+        "optimal_week_std": 0.64,
+        "optimal_week_ci95": [
+          11.94,
+          14.34
+        ],
+        "compliance_mean": 0.789,
+        "compliance_std": 0.032,
+        "compliance_ci95": [
+          0.717,
+          0.849
+        ],
+        "sigma_meas": 0.010096
+      },
+      {
+        "group": "[32,36)",
+        "optimal_week_mean": 13.17,
+        "optimal_week_std": 0.81,
+        "optimal_week_ci95": [
+          11.94,
+          15.0
+        ],
+        "compliance_mean": 0.777,
+        "compliance_std": 0.041,
+        "compliance_ci95": [
+          0.705,
+          0.853
+        ],
+        "sigma_meas": 0.010096
+      },
+      {
+        "group": "[36,40)",
+        "optimal_week_mean": 14.47,
+        "optimal_week_std": 3.04,
+        "optimal_week_ci95": [
+          11.38,
+          23.64
+        ],
+        "compliance_mean": 0.811,
+        "compliance_std": 0.1,
+        "compliance_ci95": [
+          0.625,
+          1.0
+        ],
+        "sigma_meas": 0.010096
+      },
+      {
+        "group": "[40,+inf)",
+        "optimal_week_mean": 16.15,
+        "optimal_week_std": 4.75,
+        "optimal_week_ci95": [
+          11.0,
+          24.58
+        ],
+        "compliance_mean": 0.88,
+        "compliance_std": 0.162,
+        "compliance_ci95": [
+          0.5,
+          1.0
+        ],
+        "sigma_meas": 0.010096
+      }
+    ]
+  },
+  "risk_function": {
+    "alpha_late_risk": 0.3,
+    "beta_non_compliance": 0.7,
+    "threshold": 0.04,
+    "description": "R(t,g) = 0.3*late_risk(t) + 0.7*(1-compliance_rate(t,g))"
+  },
+  "seed": 42,
+  "n_obs": 1082,
+  "n_patients": 267,
+  "environment": {
+    "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "statsmodels": "0.14.6",
+    "numpy": "2.5.1",
+    "pandas": "3.0.3"
+  },
+  "inputs": [
+    "C:\\Users\\HUAWEI\\mycumcm2025c\\workspace\\data_clean\\male_cleaned.csv"
+  ],
+  "outputs": {
+    "figures": [
+      "q3_compliance_curves.png",
+      "q3_risk_curves.png",
+      "q3_mc_timepoint_distributions.png",
+      "M1_diagnostics.png",
+      "q3_vif_comparison.png"
+    ],
+    "tables": [
+      "model_comparison.csv",
+      "M1_coefficients.csv",
+      "M2_coefficients.csv",
+      "vif_before_decomposition.csv",
+      "vif_after_decomposition.csv",
+      "q3_optimal_timepoints.csv",
+      "q3_mc_error_analysis.csv"
+    ],
+    "metrics": [
+      "model_comparison.json",
+      "mc_error_propagation.json"
+    ]
+  },
+  "degeneracy_check": {
+    "m1_resid_var": 0.000102,
+    "m2_resid_var": 0.000102,
+    "m1_unique_fitted": 1013,
+    "m2_unique_fitted": 1015
+  },
+  "fallback_trigger": {
+    "triggered": true,
+    "criteria": "max_vif_after>10 OR (weight_resid_p>0.3 AND lr_p>0.1)",
+    "current_max_vif": 1.01,
+    "current_weight_resid_p": 0.6851
+  },
+  "warnings": [
+    "weight_resid marginally significant (p=0.6851)"
+  ],
+  "errors": []
+}

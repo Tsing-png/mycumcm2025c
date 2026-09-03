@@ -1,0 +1,36 @@
+{
+  "question": "Q1",
+  "round": 1,
+  "language": "python",
+  "reviewed_files": ["code/Q1/q1_main.py"],
+  "checks": {
+    "syntax": {
+      "status": "PASS",
+      "evidence": "Script ran to completion on Python 3.14.5, no syntax errors. All 7 steps completed."
+    },
+    "input_contract": {
+      "status": "PASS",
+      "evidence": "Reads male_cleaned.csv with utf-8-sig encoding; renames Chinese column names to English; dropna on required columns (gest_week, bmi, y_conc, patient); patient cast to str. 1082 rows, 267 patients loaded correctly."
+    },
+    "method_alignment": {
+      "status": "PASS",
+      "evidence": "M1 implements approved GAMM: y_conc ~ bs(gest_week,df=4) + bs(bmi,df=3) + (1+gest_week|patient) using patsy B-spline basis + statsmodels MixedLM. M2 implements LME baseline: y_conc ~ gest_week + bmi + (1+gest_week|patient). Multiple optimizer fallback (lbfgs/powell/cg/nm). ICC computed manually. LR test for model comparison. Residual diagnostics (Shapiro, skewness, kurtosis) and partial effect plots generated."
+    },
+    "reproducibility": {
+      "status": "PASS",
+      "evidence": "SEED=42 via np.random.seed(42). patsy design_info saved and reused for prediction (avoids refit-knot errors). Environment recorded in run_summary.json. All outputs saved to files."
+    },
+    "output_contract": {
+      "status": "PASS",
+      "evidence": "run_summary.json contains: question, round, decision_id, methods (with status/metrics/diagnostics/fixed_effects/random_effects_variance), model_comparison (LR test), icc, seed, environment, inputs, outputs, degeneracy_check, fallback_trigger, warnings, errors. 9 figures, 3 tables, 1 metrics JSON saved."
+    }
+  },
+  "issues": [
+    {
+      "severity": "info",
+      "description": "Shapiro p=0.0 for both models (n=1082 makes Shapiro overpowered), but skewness=0.12 is mild — not a practical concern"
+    }
+  ],
+  "verdict": "PASS",
+  "reviewed_at": "2026-09-03T00:00:00Z"
+}

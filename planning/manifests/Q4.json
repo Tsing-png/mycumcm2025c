@@ -1,0 +1,62 @@
+{
+  "id": "Q4",
+  "title": "女胎染色体异常判定方法",
+  "classification": {
+    "primary_type": "classification/clustering",
+    "secondary_type": "descriptive/inference",
+    "confidence": "high",
+    "framing_decision_id": "q4_framing_separate_vs_unified",
+    "framing_status": "DECIDED"
+  },
+  "gates": {
+    "G1_PROBLEM_FRAMED": "PASS",
+    "G2_METHOD_SCREENED": "PASS",
+    "G2.5_METHOD_CHOSEN": {
+      "status": "PASS",
+      "decision_id": "q4_method_choice",
+      "chosen": "M1"
+    },
+    "G3_CODE_REVIEWED": {
+      "status": "PASS",
+      "round": 1,
+      "artifacts": [
+        "code/Q4/q4_main.py",
+        "code/Q4/q4_baseline.py",
+        "code/Q4/reviews/q4_python_review.json",
+        "results/Q4/experiments/round1/run_summary.json"
+      ],
+      "note": "M1 Mahalanobis AUC=0.574, best F1=0.217 (recall=26.9%, precision=18.2%) at p85. M2 Z-threshold baseline AUC=0.492. Low discrimination reflects data overlap, not code error."
+    },
+    "G4_RESULTS_FROZEN": {
+      "status": "PASS",
+      "decision_id": "q4_result_judgment",
+      "frozen_at": "2026-09-03T00:00:00Z"
+    },
+    "G5_PAPER_READY": {
+      "status": "NOT_STARTED"
+    },
+    "G6_FINAL_AUDIT": {
+      "status": "NOT_STARTED"
+    }
+  },
+  "method_shortlist": {
+    "M1": {
+      "role": "main_candidate",
+      "name": "多维马氏距离异常检测",
+      "verdict": "CONDITIONAL",
+      "key_risk": "正常/异常马氏距离分布高度重叠，p85阈值26.9%召回"
+    },
+    "M2": {
+      "role": "usable_baseline",
+      "name": "多维Z值联合阈值规则",
+      "verdict": "CONDITIONAL",
+      "key_risk": "z_squared_sum p50阈值47.8%召回但50%假阳性"
+    }
+  },
+  "fallback": {
+    "trigger": "M1最优阈值下召回率<15%且假阳性率>30%",
+    "action": "分染色体逐一判定（T13/T18/T21各建子模型）",
+    "triggered": false,
+    "m1_recall": 0.2687
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "id": "Q3",
+  "title": "BMI分组与最佳NIPT时点(多因素+达标比例)",
+  "classification": {
+    "primary_type": "optimization/decision",
+    "secondary_type": "classification/clustering",
+    "confidence": "high",
+    "framing_decision_id": null,
+    "framing_status": null
+  },
+  "gates": {
+    "G1_PROBLEM_FRAMED": "PASS",
+    "G2_METHOD_SCREENED": {
+      "status": "PASS",
+      "artifacts": [
+        "methods/Q3/q3_method_card.md",
+        "methods/Q3/probes/risk_probe_summary.json"
+      ]
+    },
+    "G2.5_METHOD_CHOSEN": {
+      "status": "PASS",
+      "decision_id": "q3_method_choice",
+      "chosen": "M1"
+    },
+    "G3_CODE_REVIEWED": {
+      "status": "PASS",
+      "round": 1,
+      "artifacts": [
+        "code/Q3/q3_main.py",
+        "code/Q3/reviews/q3_python_review.json",
+        "results/Q3/experiments/round1/run_summary.json"
+      ],
+      "notes": "Both M1 and M2 converged. Code review PASS. weight_resid p=0.685, age p=0.309 not significant. VIF decomposition 350->1.01. BMI 4-group + MC error analysis complete."
+    },
+    "G4_RESULTS_FROZEN": {
+      "status": "PASS",
+      "decision_id": "q3_result_judgment",
+      "frozen_at": "2026-09-03T00:00:00Z"
+    },
+    "G5_PAPER_READY": {
+      "status": "NOT_STARTED"
+    },
+    "G6_FINAL_AUDIT": {
+      "status": "NOT_STARTED"
+    }
+  }
+}

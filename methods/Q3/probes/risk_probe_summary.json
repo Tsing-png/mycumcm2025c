@@ -1,0 +1,85 @@
+{
+  "question": "Q3",
+  "probe_date": "2026-09-03",
+  "methods_probed": ["M1", "M2"],
+  "executability": {
+    "M1": {
+      "verdict": "PASS",
+      "evidence": "Q1 GAMM (same structure) converged in 0.68s; residual decomposition is a linear regression pre-step with guaranteed convergence; additional age covariate adds 1 fixed effect"
+    },
+    "M2": {
+      "verdict": "PASS",
+      "evidence": "Subset of Q1 structure with one added linear covariate and interaction; guaranteed convergence"
+    }
+  },
+  "data_coverage": {
+    "n_obs": 1082,
+    "n_patients": 267,
+    "missingness": {
+      "age": "0 missing",
+      "height": "0 missing (身高 column present in cleaned data)",
+      "weight": "0 missing (体重 column present in cleaned data)",
+      "bmi": "0 missing",
+      "gest_week": "0 missing",
+      "y_conc": "0 missing"
+    },
+    "effective_sample_size": "267 unique patients, ~4 measurements each",
+    "bmi_range": "16.4-42.5 (covers clinical range)",
+    "age_range": "to be confirmed from data, expected 20-45"
+  },
+  "assumption_checks": {
+    "M1": {
+      "multicollinearity": {
+        "status": "CONDITIONAL",
+        "evidence": "BMI/height/weight VIF>100 in Q1; residual decomposition (weight_resid = weight - f(BMI,height)) expected to reduce VIF<10; MUST verify post-fit",
+        "mitigation": "If VIF still >10 after decomposition, drop weight_resid and fall back to M2"
+      },
+      "panel_structure": {
+        "status": "PASS",
+        "evidence": "ICC=0.60 from Q1; random intercept+slope handles clustering"
+      },
+      "nonlinearity": {
+        "status": "PASS",
+        "evidence": "Q1 LR test chi2=76.76 (p<0.001) confirms splines improve over linear"
+      }
+    },
+    "M2": {
+      "multicollinearity": {
+        "status": "PASS",
+        "evidence": "Only BMI, age, and BMI:age interaction; no height/weight"
+      },
+      "panel_structure": {
+        "status": "PASS",
+        "evidence": "Same as M1"
+      }
+    }
+  },
+  "output_degeneracy": {
+    "M1": {
+      "status": "PASS",
+      "evidence": "Q1 GAMM produced 1018 unique fitted values out of 1082 obs; spline coefficients non-zero; random effects variance >0"
+    },
+    "M2": {
+      "status": "PASS",
+      "evidence": "Q1 LME baseline produced 1018 unique fitted values; adding age unlikely to cause degeneracy"
+    }
+  },
+  "perturbation_sensitivity": {
+    "status": "TO_VERIFY",
+    "plan": "BMI +/-1 perturbation on optimal timepoint; MC simulation with measurement noise sigma=0.005 on y_conc"
+  },
+  "scale_check": {
+    "M1": {"expected_time": "<30s", "memory": "<500MB"},
+    "M2": {"expected_time": "<10s", "memory": "<200MB"},
+    "mc_simulation": {"expected_time": "<30s for 1000 iterations", "memory": "<500MB"}
+  },
+  "verdict": {
+    "M1": "CONDITIONAL",
+    "M1_condition": "VIF of weight_resid must be <10 after residual decomposition; if not, activate fallback to M2-only",
+    "M2": "PASS"
+  },
+  "fallback_trigger": {
+    "trigger": "weight_resid VIF>10 OR (weight_resid p>0.3 AND LR M1-vs-M2 p>0.1)",
+    "action": "Drop weight_resid, report M2 as primary with note that height/weight add no independent information beyond BMI"
+  }
+}

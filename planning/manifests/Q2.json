@@ -1,0 +1,46 @@
+{
+  "id": "Q2",
+  "title": "BMI分组与最佳NIPT时点(单因素)",
+  "classification": {
+    "primary_type": "optimization/decision",
+    "secondary_type": "classification/clustering",
+    "confidence": "high",
+    "framing_decision_id": null,
+    "framing_status": null
+  },
+  "gates": {
+    "G1_PROBLEM_FRAMED": "PASS",
+    "G2_METHOD_SCREENED": {
+      "status": "PASS",
+      "method_card": "methods/Q2/q2_method_card.md",
+      "probe_summary": "methods/Q2/probes/risk_probe_summary.json"
+    },
+    "G2.5_METHOD_CHOSEN": {
+      "status": "PASS",
+      "decision_id": "q2_method_choice",
+      "chosen": "M1",
+      "ledger": "methods/Q2/q2_decisions.jsonl"
+    },
+    "G3_CODE_REVIEWED": {
+      "status": "PASS",
+      "round": 1,
+      "artifacts": [
+        "code/Q2/q2_main.py",
+        "code/Q2/reviews/q2_python_review.json",
+        "results/Q2/experiments/round1/run_summary.json"
+      ],
+      "note": "M1 and M2 both completed. Code review PASS. 3 data-driven groups (breaks 30/36), optimal weeks 11.7/11.8/13.5."
+    },
+    "G4_RESULTS_FROZEN": {
+      "status": "PASS",
+      "decision_id": "q2_result_judgment",
+      "frozen_at": "2026-09-03T00:00:00Z"
+    },
+    "G5_PAPER_READY": {
+      "status": "NOT_STARTED"
+    },
+    "G6_FINAL_AUDIT": {
+      "status": "NOT_STARTED"
+    }
+  }
+}

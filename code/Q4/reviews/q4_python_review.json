@@ -1,0 +1,44 @@
+{
+  "question": "Q4",
+  "round": 1,
+  "language": "python",
+  "reviewed_files": ["code/Q4/q4_main.py", "code/Q4/q4_baseline.py", "code/Q4/run_all.py"],
+  "checks": {
+    "syntax": {
+      "status": "PASS",
+      "evidence": "Both q4_main.py and q4_baseline.py ran to completion on Python 3.14.5. run_all.py orchestrates both scripts."
+    },
+    "input_contract": {
+      "status": "PASS",
+      "evidence": "Reads female_cleaned.csv with utf-8-sig encoding. Label column (染色体非整倍体) correctly mapped: notna=anomaly, NaN=normal. 605 rows, 67 anomaly, 538 normal. Core features (Z13/Z18/Z21/XZ/BMI/X_conc) validated for NaN before use."
+    },
+    "method_alignment": {
+      "status": "PASS",
+      "evidence": "M1 implements approved Mahalanobis distance anomaly detection with 4 experiments: (1) core 6 features + empirical covariance, (2) core + robust covariance (MinCovDet), (3) extended 15 features, (4) Z-values only (Z13/Z18/Z21). Multiple threshold strategies tested: percentile-based (p50-p99) and chi2-based. Per-anomaly-type detection rates computed. M2 baseline implements multivariate Z-value joint threshold rules. ROC/PR curves and AUC computed for both."
+    },
+    "reproducibility": {
+      "status": "PASS",
+      "evidence": "np.random.seed(42) set globally. MinCovDet(random_state=42). All outputs saved to files. Environment recorded in run_summary.json."
+    },
+    "output_contract": {
+      "status": "PASS",
+      "evidence": "run_summary.json contains decision_id, round, methods with status/key_results/AUC, comparison, inputs, outputs, seed, environment, degeneracy_check, fallback_trigger, warnings, errors. 7 figures, 2 tables, 2 metrics JSONs saved."
+    }
+  },
+  "issues": [
+    {
+      "severity": "info",
+      "description": "M1 best AUC-ROC=0.574 (core features). Low discriminative power reflects the fundamental challenge: anomaly-labeled samples overlap heavily with normal samples in feature space. This is a data limitation, not a code issue."
+    },
+    {
+      "severity": "info",
+      "description": "M1 best result at p85 threshold: recall=26.9%, precision=18.2%, F1=21.7%. Low but expected given data overlap. M2 baseline achieves higher recall (47.8%) but at 50% FPR."
+    },
+    {
+      "severity": "warning",
+      "description": "All fetuses marked 'healthy' — the aneuploidy labels may represent NIPT screening flags rather than confirmed diagnoses. This affects interpretation of recall/precision metrics. Paper should explicitly discuss this label ambiguity."
+    }
+  ],
+  "verdict": "PASS",
+  "reviewed_at": "2026-09-03T00:00:00Z"
+}

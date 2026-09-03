@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "problem_source": ["2025年全国大学生数学建模竞赛C题", "男胎检测数据(1082条,31列)", "女胎检测数据(605条,31列)"],
+  "global_goal": "优化NIPT检测时点选择与胎儿异常判定方法,通过合理的BMI分组确定最佳检测时点,使孕妇潜在风险最小,并给出女胎异常判定方法",
+  "objects": [
+    {"name": "孕妇", "attributes": ["年龄","身高","体重","BMI","末次月经","IVF妊娠","怀孕次数","生产次数"]},
+    {"name": "胎儿", "attributes": ["性别(男/女)","染色体浓度","染色体Z值","是否健康","非整倍体状态"]},
+    {"name": "NIPT检测", "attributes": ["检测日期","检测抽血次数","检测孕周","原始读段数","比对比例","重复读段比例","唯一比对读段数","GC含量","被过滤读段比例"]}
+  ],
+  "data_inventory": [
+    {
+      "id": "D1",
+      "description": "男胎检测数据",
+      "rows": 1082,
+      "columns": 31,
+      "column_labels": "A-AE",
+      "fields": ["孕妇代码","年龄","身高","体重","末次月经","IVF妊娠","检测日期","检测抽血次数","检测孕周","BMI","原始读段数","比对比例","重复读段比例","唯一比对读段数","GC含量","13号染色体Z值","18号染色体Z值","21号染色体Z值","X染色体Z值","Y染色体Z值","Y染色体浓度","X染色体浓度","13号GC含量","18号GC含量","21号GC含量","被过滤读段比例","染色体非整倍体","怀孕次数","生产次数","胎儿是否健康"]
+    },
+    {
+      "id": "D2",
+      "description": "女胎检测数据",
+      "rows": 605,
+      "columns": 31,
+      "column_labels": "A-AE",
+      "fields": "同D1结构"
+    }
+  ],
+  "global_constraints": [
+    {"type": "hard", "description": "NIPT有效检测孕期为10周~25周"},
+    {"type": "hard", "description": "男胎Y染色体浓度达到或高于4%认为NIPT结果基本准确"},
+    {"type": "hard", "description": "女胎X染色体浓度无异常认为NIPT结果基本准确"},
+    {"type": "soft", "description": "早期发现(12周以内)风险较低"},
+    {"type": "soft", "description": "中期发现(13-27周)风险高"},
+    {"type": "soft", "description": "晚期发现(28周以后)风险极高"},
+    {"type": "fact", "description": "畸型胎儿主要有唐氏综合征(21号)、爱德华氏综合征(18号)、帕陶氏综合征(13号)"},
+    {"type": "fact", "description": "临床经验BMI分组示例: [20,28),[28,32),[32,36),[36,40),40以上"}
+  ],
+  "subquestions": [
+    {
+      "id": "Q1",
+      "statement": "试分析胎儿Y染色体浓度与孕妇的孕周数和BMI等指标的相关特性,给出相应的关系模型,并检验其显著性。",
+      "goal": "建立Y染色体浓度与孕周数、BMI等指标的关系模型,并进行显著性检验",
+      "inputs": ["D1:男胎检测数据", "Y染色体浓度", "检测孕周", "BMI", "其他可能相关指标"],
+      "unknowns_or_decisions": [
+        "Y染色体浓度与各指标的函数关系形式",
+        "'等指标'的具体范围(可能包括年龄、身高、体重等)"
+      ],
+      "constraints": [
+        {"type": "hard", "description": "模型需通过显著性检验"}
+      ],
+      "required_outputs": [
+        "Y染色体浓度与孕周数、BMI的关系模型",
+        "显著性检验结果"
+      ],
+      "success_criteria": ["模型通过统计显著性检验", "关系模型能解释Y染色体浓度的变化规律"],
+      "dependencies": [],
+      "proposed_relationships": [
+        {"description": "Y染色体浓度随孕周增加而升高(题目隐含)", "status": "proposed"},
+        {"description": "Y染色体浓度随BMI增加而降低或达标时间延后(题目隐含)", "status": "proposed"}
+      ],
+      "ambiguities": [
+        "'等指标'未明确列出,需判断哪些变量纳入模型"
+      ]
+    },
+    {
+      "id": "Q2",
+      "statement": "试对男胎孕妇的BMI进行合理分组,给出每组的BMI区间和最佳NIPT时点,使得孕妇可能的潜在风险最小,并分析检测误差对结果的影响。",
+      "goal": "基于BMI分组确定各组最佳NIPT检测时点,最小化潜在风险,并分析检测误差影响",
+      "inputs": ["D1:男胎检测数据", "Q1的关系模型(可选)"],
+      "unknowns_or_decisions": [
+        "BMI分组方案(组数和区间边界)",
+        "每组的最佳NIPT时点",
+        "潜在风险的量化定义",
+        "检测误差的建模方式"
+      ],
+      "constraints": [
+        {"type": "hard", "description": "BMI是影响Y染色体浓度最早达标时间的主要因素"},
+        {"type": "hard", "description": "Y染色体浓度达标阈值为4%"},
+        {"type": "soft", "description": "尽早检测以降低风险"}
+      ],
+      "required_outputs": [
+        "BMI分组方案(每组的区间)",
+        "每组的最佳NIPT时点",
+        "潜在风险最小化的论证",
+        "检测误差对结果的影响分析"
+      ],
+      "success_criteria": ["分组方案合理且有数据支撑", "最佳时点使潜在风险最小", "误差影响有定量分析"],
+      "dependencies": ["Q1(关系模型可为Q2提供基础)"],
+      "proposed_relationships": [
+        {"description": "BMI越高,Y染色体浓度达标时间越晚", "status": "proposed"}
+      ],
+      "ambiguities": [
+        "潜在风险的具体量化方式未给出",
+        "检测误差指什么(浓度测量误差?孕周估计误差?)"
+      ]
+    },
+    {
+      "id": "Q3",
+      "statement": "综合考虑身高、体重、年龄等因素、检测误差和胎儿的Y染色体浓度达标比例,根据男胎孕妇的BMI,给出合理分组以及每组的最佳NIPT时点,使得孕妇潜在风险最小,并分析检测误差对结果的影响。",
+      "goal": "在Q2基础上综合考虑多因素和达标比例,优化BMI分组和最佳NIPT时点",
+      "inputs": ["D1:男胎检测数据", "身高、体重、年龄等多因素", "Y染色体浓度达标比例"],
+      "unknowns_or_decisions": [
+        "多因素如何影响达标时间",
+        "达标比例的目标值或权衡方式",
+        "综合多因素后的分组方案"
+      ],
+      "constraints": [
+        {"type": "hard", "description": "分组依据仍为BMI,但达标时间受多因素影响"},
+        {"type": "hard", "description": "需考虑Y染色体浓度达标比例(>=4%的比例)"}
+      ],
+      "required_outputs": [
+        "综合多因素的BMI分组方案",
+        "每组的最佳NIPT时点",
+        "潜在风险最小化论证",
+        "检测误差影响分析"
+      ],
+      "success_criteria": ["相比Q2有实质改进或更全面的考量", "达标比例纳入优化目标", "多因素影响有定量论证"],
+      "dependencies": ["Q1(关系模型)", "Q2(基础分组方案)"],
+      "proposed_relationships": [
+        {"description": "身高、体重、年龄等因素独立于BMI对达标时间有额外影响", "status": "proposed"}
+      ],
+      "ambiguities": [
+        "达标比例如何与风险权衡(高达标比例 vs 早检测)",
+        "Q3与Q2的核心区别在于多因素和达标比例的引入"
+      ]
+    },
+    {
+      "id": "Q4",
+      "statement": "以女胎孕妇的21号、18号和13号染色体非整倍体(AB列)为判定结果,综合考虑X染色体及上述染色体的Z值、GC含量、读段数及相关比例、BMI等因素,给出女胎异常的判定方法。",
+      "goal": "建立女胎染色体异常的判定方法(分类模型)",
+      "inputs": ["D2:女胎检测数据", "21/18/13号染色体非整倍体(AB列,作为标签)", "X染色体Z值", "13/18/21号Z值", "GC含量", "读段数及比例", "BMI等因素"],
+      "unknowns_or_decisions": [
+        "判定方法的选择(分类/判别/阈值规则)",
+        "特征选择与组合方式",
+        "异常的具体定义(AB列的编码含义)"
+      ],
+      "constraints": [
+        {"type": "hard", "description": "女胎不携带Y染色体,无法用Y染色体浓度验证准确性"},
+        {"type": "hard", "description": "判定目标为21/18/13号染色体非整倍体"}
+      ],
+      "required_outputs": [
+        "女胎异常的判定方法",
+        "判定准确性或性能评估"
+      ],
+      "success_criteria": ["判定方法有明确的输入输出", "性能评估合理", "方法可解释"],
+      "dependencies": [],
+      "proposed_relationships": [
+        {"description": "Z值偏离正常范围指示染色体异常", "status": "proposed"},
+        {"description": "GC含量和读段数影响检测质量,间接影响判定", "status": "proposed"}
+      ],
+      "ambiguities": [
+        "AB列(染色体非整倍体)的具体编码方式需从数据确认",
+        "是对三种异常分别判定还是统一判定"
+      ]
+    }
+  ],
+  "missing_material": [
+    "实际附件数据文件尚未确认具体列名与编码(需读取原始数据验证)",
+    "女胎数据中Y染色体浓度列含义待确认(女胎不携带Y染色体)"
+  ],
+  "human_decisions_needed": [
+    {"id": "HD1", "topic": "风险量化方式", "description": "潜在风险如何量化: 是否采用分段风险函数(早/中/晚期),具体风险权重需人工确认"},
+    {"id": "HD2", "topic": "Q2/Q3分组数量", "description": "BMI分组的组数是否有上限约束,还是完全由数据驱动"},
+    {"id": "HD3", "topic": "Q4异常判定阈值", "description": "女胎异常判定的阈值标准和评价指标需人工确认"}
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "question": "Q1",
+  "round": 1,
+  "decision_id": "q1_method_choice",
+  "methods": [
+    {
+      "id": "M1",
+      "role": "main_candidate",
+      "name": "GAMM (spline basis + MixedLM)",
+      "formula": "y_conc ~ bs(gest_week,df=4) + bs(bmi,df=3) + (1+gest_week|patient)",
+      "status": "converged",
+      "time_s": 0.68,
+      "metrics": {
+        "model": "M1_GAMM",
+        "log_likelihood": 2632.4,
+        "n_fe": 8,
+        "n_params": 12,
+        "AIC": -5240.8,
+        "BIC": -5180.96,
+        "RMSE": 0.010079,
+        "MAE": 0.007039
+      },
+      "residual_diagnostics": {
+        "shapiro_stat": 0.9429,
+        "shapiro_p": 0.0,
+        "skewness": 0.1248,
+        "kurtosis": 4.1511,
+        "resid_mean": -0.0,
+        "resid_std": 0.010084
+      },
+      "fixed_effects": {
+        "Intercept": 0.010657,
+        "gw_s0": 0.015308,
+        "gw_s1": 0.017306,
+        "gw_s2": 0.043438,
+        "gw_s3": 0.123841,
+        "bmi_s0": 0.102257,
+        "bmi_s1": 0.012716,
+        "bmi_s2": 0.015014
+      },
+      "random_effects_variance": {
+        "intercept": 0.001886,
+        "gest_week": 8e-06
+      }
+    },
+    {
+      "id": "M2",
+      "role": "usable_baseline",
+      "name": "LME (linear MixedLM)",
+      "formula": "y_conc ~ gest_week + bmi + (1+gest_week|patient)",
+      "status": "converged",
+      "time_s": 0.71,
+      "metrics": {
+        "model": "M2_LME",
+        "log_likelihood": 2594.02,
+        "n_fe": 3,
+        "n_params": 7,
+        "AIC": -5174.04,
+        "BIC": -5139.13,
+        "RMSE": 0.011076,
+        "MAE": 0.0077
+      },
+      "residual_diagnostics": {
+        "shapiro_stat": 0.9456,
+        "shapiro_p": 0.0,
+        "skewness": -0.018,
+        "kurtosis": 3.855,
+        "resid_mean": -0.0,
+        "resid_std": 0.011082
+      },
+      "fixed_effects": {
+        "Intercept": 0.058604,
+        "gest_week": 0.003473,
+        "bmi": -0.001185
+      },
+      "random_effects_variance": {
+        "intercept": 0.001766,
+        "gest_week": 6e-06
+      }
+    }
+  ],
+  "model_comparison": {
+    "lr_test": {
+      "chi2": 76.76,
+      "df": 5,
+      "p_value": 0.0
+    },
+    "gamm_better_aic": true,
+    "gamm_better_bic": true
+  },
+  "icc": 0.6002,
+  "seed": 42,
+  "n_obs": 1082,
+  "n_patients": 267,
+  "environment": {
+    "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "statsmodels": "0.14.6",
+    "numpy": "2.5.1",
+    "pandas": "3.0.3"
+  },
+  "inputs": [
+    "C:\\Users\\HUAWEI\\mycumcm2025c\\workspace\\data_clean\\male_cleaned.csv"
+  ],
+  "outputs": {
+    "figures": [
+      "M1_GAMM_resid_vs_fitted.png",
+      "M1_GAMM_qq.png",
+      "M1_GAMM_resid_hist.png",
+      "M2_LME_resid_vs_fitted.png",
+      "M2_LME_qq.png",
+      "M2_LME_resid_hist.png",
+      "M1_GAMM_partial_gest_week.png",
+      "M1_GAMM_partial_bmi.png",
+      "M1_vs_M2_partial_effects.png"
+    ],
+    "tables": [
+      "model_comparison.csv",
+      "M1_GAMM_coefficients.csv",
+      "M2_LME_coefficients.csv"
+    ],
+    "metrics": [
+      "model_comparison.json"
+    ]
+  },
+  "degeneracy_check": {
+    "gamm_resid_var": 0.000102,
+    "lme_resid_var": 0.000123,
+    "gamm_unique_fitted": 1018,
+    "lme_unique_fitted": 1018
+  },
+  "fallback_trigger": {
+    "triggered": false,
+    "criteria": "abs(skew)>1.0 AND shapiro_p<0.001 AND LR_p<0.01",
+    "current_skew": 0.1248,
+    "current_shapiro_p": 0.0
+  },
+  "warnings": [],
+  "errors": []
+}

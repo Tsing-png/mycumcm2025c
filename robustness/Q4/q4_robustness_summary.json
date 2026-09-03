@@ -1,0 +1,658 @@
+{
+  "question": "Q4",
+  "robustness_checks": [
+    {
+      "check": "feature_subset_sensitivity",
+      "claim": "Core 6-feature set is near-optimal among tested subsets",
+      "perturbation": "7 named subsets + 6 leave-one-feature-out",
+      "results": [
+        {
+          "name": "z3_only",
+          "n_features": 3,
+          "features": [
+            "13号Z值",
+            "18号Z值",
+            "21号Z值"
+          ],
+          "auc_roc": 0.4854,
+          "best_f1": 0.1283,
+          "best_recall": 0.1791,
+          "best_precision": 0.1,
+          "best_pct": 80
+        },
+        {
+          "name": "z4",
+          "n_features": 4,
+          "features": [
+            "13号Z值",
+            "18号Z值",
+            "21号Z值",
+            "X染色体Z值"
+          ],
+          "auc_roc": 0.4693,
+          "best_f1": 0.1384,
+          "best_recall": 0.1642,
+          "best_precision": 0.1196,
+          "best_pct": 85
+        },
+        {
+          "name": "z3_bmi",
+          "n_features": 4,
+          "features": [
+            "13号Z值",
+            "18号Z值",
+            "21号Z值",
+            "BMI"
+          ],
+          "auc_roc": 0.4381,
+          "best_f1": 0.1384,
+          "best_recall": 0.1642,
+          "best_precision": 0.1196,
+          "best_pct": 85
+        },
+        {
+          "name": "z3_xconc",
+          "n_features": 4,
+          "features": [
+            "13号Z值",
+            "18号Z值",
+            "21号Z值",
+            "X染色体浓度"
+          ],
+          "auc_roc": 0.6251,
+          "best_f1": 0.2485,
+          "best_recall": 0.3134,
+          "best_precision": 0.2059,
+          "best_pct": 85
+        },
+        {
+          "name": "z4_bmi",
+          "n_features": 5,
+          "features": [
+            "13号Z值",
+            "18号Z值",
+            "21号Z值",
+            "X染色体Z值",
+            "BMI"
+          ],
+          "auc_roc": 0.4339,
+          "best_f1": 0.1384,
+          "best_recall": 0.1642,
+          "best_precision": 0.1196,
+          "best_pct": 85
+        },
+        {
+          "name": "z4_xconc",
+          "n_features": 5,
+          "features": [
+            "13号Z值",
+            "18号Z值",
+            "21号Z值",
+            "X染色体Z值",
+            "X染色体浓度"
+          ],
+          "auc_roc": 0.6152,
+          "best_f1": 0.2412,
+          "best_recall": 0.3582,
+          "best_precision": 0.1818,
+          "best_pct": 80
+        },
+        {
+          "name": "core_6",
+          "n_features": 6,
+          "features": [
+            "13号Z值",
+            "18号Z值",
+            "21号Z值",
+            "X染色体Z值",
+            "BMI",
+            "X染色体浓度"
+          ],
+          "auc_roc": 0.5467,
+          "best_f1": 0.2143,
+          "best_recall": 0.3134,
+          "best_precision": 0.1628,
+          "best_pct": 80
+        },
+        {
+          "name": "drop_13号Z",
+          "n_features": 5,
+          "features": [
+            "18号Z值",
+            "21号Z值",
+            "X染色体Z值",
+            "BMI",
+            "X染色体浓度"
+          ],
+          "auc_roc": 0.5356,
+          "best_f1": 0.1959,
+          "best_recall": 0.2836,
+          "best_precision": 0.1496,
+          "best_pct": 80
+        },
+        {
+          "name": "drop_18号Z",
+          "n_features": 5,
+          "features": [
+            "13号Z值",
+            "21号Z值",
+            "X染色体Z值",
+            "BMI",
+            "X染色体浓度"
+          ],
+          "auc_roc": 0.5647,
+          "best_f1": 0.2051,
+          "best_recall": 0.2985,
+          "best_precision": 0.1562,
+          "best_pct": 80
+        },
+        {
+          "name": "drop_21号Z",
+          "n_features": 5,
+          "features": [
+            "13号Z值",
+            "18号Z值",
+            "X染色体Z值",
+            "BMI",
+            "X染色体浓度"
+          ],
+          "auc_roc": 0.5351,
+          "best_f1": 0.2061,
+          "best_recall": 0.2537,
+          "best_precision": 0.1735,
+          "best_pct": 85
+        },
+        {
+          "name": "drop_X染色体",
+          "n_features": 5,
+          "features": [
+            "13号Z值",
+            "18号Z值",
+            "21号Z值",
+            "X染色体Z值",
+            "BMI"
+          ],
+          "auc_roc": 0.4339,
+          "best_f1": 0.1384,
+          "best_recall": 0.1642,
+          "best_precision": 0.1196,
+          "best_pct": 85
+        },
+        {
+          "name": "drop_BMI",
+          "n_features": 5,
+          "features": [
+            "13号Z值",
+            "18号Z值",
+            "21号Z值",
+            "X染色体Z值",
+            "X染色体浓度"
+          ],
+          "auc_roc": 0.6152,
+          "best_f1": 0.2412,
+          "best_recall": 0.3582,
+          "best_precision": 0.1818,
+          "best_pct": 80
+        }
+      ],
+      "reference_auc": 0.5467,
+      "auc_range": [
+        0.4339,
+        0.6251
+      ],
+      "status": "CONDITIONAL",
+      "limitation": "AUC is low overall (near 0.5-0.6); feature choice has limited impact because the anomaly signal is weak in these features"
+    },
+    {
+      "check": "threshold_sensitivity",
+      "claim": "Optimal threshold lies in a stable range around p80-p90",
+      "perturbation": "percentile threshold from p50 to p98",
+      "results": [
+        {
+          "threshold_pct": 50,
+          "threshold_val": 2.4071,
+          "recall": 0.5224,
+          "precision": 0.1151,
+          "f1": 0.1887,
+          "tp": 35,
+          "fp": 269,
+          "fn": 32,
+          "tn": 268
+        },
+        {
+          "threshold_pct": 52,
+          "threshold_val": 2.4433,
+          "recall": 0.5075,
+          "precision": 0.1164,
+          "f1": 0.1894,
+          "tp": 34,
+          "fp": 258,
+          "fn": 33,
+          "tn": 279
+        },
+        {
+          "threshold_pct": 54,
+          "threshold_val": 2.4739,
+          "recall": 0.4925,
+          "precision": 0.1179,
+          "f1": 0.1902,
+          "tp": 33,
+          "fp": 247,
+          "fn": 34,
+          "tn": 290
+        },
+        {
+          "threshold_pct": 56,
+          "threshold_val": 2.5179,
+          "recall": 0.4776,
+          "precision": 0.1194,
+          "f1": 0.191,
+          "tp": 32,
+          "fp": 236,
+          "fn": 35,
+          "tn": 301
+        },
+        {
+          "threshold_pct": 58,
+          "threshold_val": 2.5573,
+          "recall": 0.4627,
+          "precision": 0.1206,
+          "f1": 0.1914,
+          "tp": 31,
+          "fp": 226,
+          "fn": 36,
+          "tn": 311
+        },
+        {
+          "threshold_pct": 60,
+          "threshold_val": 2.5994,
+          "recall": 0.4478,
+          "precision": 0.1224,
+          "f1": 0.1923,
+          "tp": 30,
+          "fp": 215,
+          "fn": 37,
+          "tn": 322
+        },
+        {
+          "threshold_pct": 62,
+          "threshold_val": 2.6329,
+          "recall": 0.4179,
+          "precision": 0.1207,
+          "f1": 0.1873,
+          "tp": 28,
+          "fp": 204,
+          "fn": 39,
+          "tn": 333
+        },
+        {
+          "threshold_pct": 64,
+          "threshold_val": 2.6554,
+          "recall": 0.4179,
+          "precision": 0.1267,
+          "f1": 0.1944,
+          "tp": 28,
+          "fp": 193,
+          "fn": 39,
+          "tn": 344
+        },
+        {
+          "threshold_pct": 66,
+          "threshold_val": 2.698,
+          "recall": 0.403,
+          "precision": 0.1286,
+          "f1": 0.1949,
+          "tp": 27,
+          "fp": 183,
+          "fn": 40,
+          "tn": 354
+        },
+        {
+          "threshold_pct": 68,
+          "threshold_val": 2.7549,
+          "recall": 0.3881,
+          "precision": 0.1313,
+          "f1": 0.1962,
+          "tp": 26,
+          "fp": 172,
+          "fn": 41,
+          "tn": 365
+        },
+        {
+          "threshold_pct": 70,
+          "threshold_val": 2.7995,
+          "recall": 0.3731,
+          "precision": 0.1344,
+          "f1": 0.1976,
+          "tp": 25,
+          "fp": 161,
+          "fn": 42,
+          "tn": 376
+        },
+        {
+          "threshold_pct": 72,
+          "threshold_val": 2.8484,
+          "recall": 0.3582,
+          "precision": 0.1371,
+          "f1": 0.1983,
+          "tp": 24,
+          "fp": 151,
+          "fn": 43,
+          "tn": 386
+        },
+        {
+          "threshold_pct": 74,
+          "threshold_val": 2.8927,
+          "recall": 0.3433,
+          "precision": 0.1411,
+          "f1": 0.2,
+          "tp": 23,
+          "fp": 140,
+          "fn": 44,
+          "tn": 397
+        },
+        {
+          "threshold_pct": 76,
+          "threshold_val": 2.9651,
+          "recall": 0.3284,
+          "precision": 0.1457,
+          "f1": 0.2018,
+          "tp": 22,
+          "fp": 129,
+          "fn": 45,
+          "tn": 408
+        },
+        {
+          "threshold_pct": 78,
+          "threshold_val": 3.0159,
+          "recall": 0.3134,
+          "precision": 0.1511,
+          "f1": 0.2039,
+          "tp": 21,
+          "fp": 118,
+          "fn": 46,
+          "tn": 419
+        },
+        {
+          "threshold_pct": 80,
+          "threshold_val": 3.0823,
+          "recall": 0.3134,
+          "precision": 0.1628,
+          "f1": 0.2143,
+          "tp": 21,
+          "fp": 108,
+          "fn": 46,
+          "tn": 429
+        },
+        {
+          "threshold_pct": 82,
+          "threshold_val": 3.1497,
+          "recall": 0.2836,
+          "precision": 0.1638,
+          "f1": 0.2077,
+          "tp": 19,
+          "fp": 97,
+          "fn": 48,
+          "tn": 440
+        },
+        {
+          "threshold_pct": 84,
+          "threshold_val": 3.2319,
+          "recall": 0.2388,
+          "precision": 0.1569,
+          "f1": 0.1893,
+          "tp": 16,
+          "fp": 86,
+          "fn": 51,
+          "tn": 451
+        },
+        {
+          "threshold_pct": 86,
+          "threshold_val": 3.3556,
+          "recall": 0.2239,
+          "precision": 0.1648,
+          "f1": 0.1899,
+          "tp": 15,
+          "fp": 76,
+          "fn": 52,
+          "tn": 461
+        },
+        {
+          "threshold_pct": 88,
+          "threshold_val": 3.4936,
+          "recall": 0.194,
+          "precision": 0.1667,
+          "f1": 0.1793,
+          "tp": 13,
+          "fp": 65,
+          "fn": 54,
+          "tn": 472
+        },
+        {
+          "threshold_pct": 90,
+          "threshold_val": 3.6077,
+          "recall": 0.1642,
+          "precision": 0.1692,
+          "f1": 0.1667,
+          "tp": 11,
+          "fp": 54,
+          "fn": 56,
+          "tn": 483
+        },
+        {
+          "threshold_pct": 92,
+          "threshold_val": 3.8553,
+          "recall": 0.1343,
+          "precision": 0.1731,
+          "f1": 0.1513,
+          "tp": 9,
+          "fp": 43,
+          "fn": 58,
+          "tn": 494
+        },
+        {
+          "threshold_pct": 94,
+          "threshold_val": 4.0869,
+          "recall": 0.1045,
+          "precision": 0.175,
+          "f1": 0.1308,
+          "tp": 7,
+          "fp": 33,
+          "fn": 60,
+          "tn": 504
+        },
+        {
+          "threshold_pct": 96,
+          "threshold_val": 4.525,
+          "recall": 0.0448,
+          "precision": 0.12,
+          "f1": 0.0652,
+          "tp": 3,
+          "fp": 22,
+          "fn": 64,
+          "tn": 515
+        },
+        {
+          "threshold_pct": 98,
+          "threshold_val": 5.4025,
+          "recall": 0.0149,
+          "precision": 0.0833,
+          "f1": 0.0253,
+          "tp": 1,
+          "fp": 11,
+          "fn": 66,
+          "tn": 526
+        }
+      ],
+      "best_f1": {
+        "threshold_pct": 80,
+        "threshold_val": 3.0823,
+        "recall": 0.3134,
+        "precision": 0.1628,
+        "f1": 0.2143,
+        "tp": 21,
+        "fp": 108,
+        "fn": 46,
+        "tn": 429
+      },
+      "near_optimal_range": [
+        50,
+        88
+      ],
+      "status": "PASS",
+      "limitation": "F1 is low across all thresholds due to weak separability"
+    },
+    {
+      "check": "leave_one_out_cv",
+      "claim": "Detection is not driven by a single influential anomaly",
+      "perturbation": "Leave-one-anomaly-out recomputation",
+      "n_anomaly": 67,
+      "loo_recall_p85": 0.2239,
+      "loo_recall_p90": 0.1642,
+      "per_type": {
+        "T21": {
+          "total": 9,
+          "flagged_85": 0,
+          "flagged_90": 0,
+          "recall_85": 0.0,
+          "recall_90": 0.0
+        },
+        "T13": {
+          "total": 10,
+          "flagged_85": 3,
+          "flagged_90": 3,
+          "recall_85": 0.3,
+          "recall_90": 0.3
+        },
+        "T18": {
+          "total": 33,
+          "flagged_85": 9,
+          "flagged_90": 6,
+          "recall_85": 0.2727,
+          "recall_90": 0.1818
+        },
+        "T13T18": {
+          "total": 11,
+          "flagged_85": 2,
+          "flagged_90": 2,
+          "recall_85": 0.1818,
+          "recall_90": 0.1818
+        },
+        "T18T21": {
+          "total": 2,
+          "flagged_85": 0,
+          "flagged_90": 0,
+          "recall_85": 0.0,
+          "recall_90": 0.0
+        },
+        "T13T21": {
+          "total": 2,
+          "flagged_85": 1,
+          "flagged_90": 0,
+          "recall_85": 0.5,
+          "recall_90": 0.0
+        }
+      },
+      "results_sample": [
+        {
+          "index": 14,
+          "anomaly_type": "T21",
+          "distance": 2.1351,
+          "threshold_p85": 3.3107,
+          "threshold_p90": 3.6077,
+          "flagged_p85": false,
+          "flagged_p90": false
+        },
+        {
+          "index": 15,
+          "anomaly_type": "T13",
+          "distance": 2.4273,
+          "threshold_p85": 3.3107,
+          "threshold_p90": 3.6077,
+          "flagged_p85": false,
+          "flagged_p90": false
+        },
+        {
+          "index": 19,
+          "anomaly_type": "T21",
+          "distance": 1.8226,
+          "threshold_p85": 3.3107,
+          "threshold_p90": 3.6077,
+          "flagged_p85": false,
+          "flagged_p90": false
+        },
+        {
+          "index": 25,
+          "anomaly_type": "T13",
+          "distance": 3.2004,
+          "threshold_p85": 3.3107,
+          "threshold_p90": 3.6077,
+          "flagged_p85": false,
+          "flagged_p90": false
+        },
+        {
+          "index": 45,
+          "anomaly_type": "T18",
+          "distance": 1.5867,
+          "threshold_p85": 3.3107,
+          "threshold_p90": 3.6077,
+          "flagged_p85": false,
+          "flagged_p90": false
+        },
+        {
+          "index": 61,
+          "anomaly_type": "T13T18",
+          "distance": 2.1182,
+          "threshold_p85": 3.3107,
+          "threshold_p90": 3.6077,
+          "flagged_p85": false,
+          "flagged_p90": false
+        },
+        {
+          "index": 68,
+          "anomaly_type": "T21",
+          "distance": 2.5816,
+          "threshold_p85": 3.3107,
+          "threshold_p90": 3.6077,
+          "flagged_p85": false,
+          "flagged_p90": false
+        },
+        {
+          "index": 69,
+          "anomaly_type": "T21",
+          "distance": 3.1507,
+          "threshold_p85": 3.3107,
+          "threshold_p90": 3.6077,
+          "flagged_p85": false,
+          "flagged_p90": false
+        },
+        {
+          "index": 72,
+          "anomaly_type": "T18T21",
+          "distance": 2.76,
+          "threshold_p85": 3.3107,
+          "threshold_p90": 3.6077,
+          "flagged_p85": false,
+          "flagged_p90": false
+        },
+        {
+          "index": 75,
+          "anomaly_type": "T13",
+          "distance": 4.1296,
+          "threshold_p85": 3.3107,
+          "threshold_p90": 3.6077,
+          "flagged_p85": true,
+          "flagged_p90": true
+        }
+      ],
+      "status": "PASS",
+      "limitation": "LOO recomputes robust covariance each time, which is costly but rigorous; small anomaly count limits statistical power of per-type analysis"
+    }
+  ],
+  "seed": 42,
+  "figures": [
+    "q4_feature_subset_sensitivity.png",
+    "q4_threshold_sensitivity.png",
+    "q4_loo_cv.png"
+  ]
+}

@@ -1,0 +1,4 @@
+﻿group,bmi_lo,bmi_hi,n_patients,n_reached_threshold,bmi_mean,empirical_threshold_median_week,empirical_threshold_mean_week,optimal_nipt_week,min_total_risk,risk_delay_at_opt,risk_inaccuracy_at_opt
+"G1: [20.7, 30.0)",20.7,30.0,76,76,28.9,12.79,13.52,11.72,0.0208,0.0415,0.007
+"G2: [30.0, 36.0)",30.0,36.0,171,165,32.3,12.71,13.32,11.8,0.0218,0.043,0.0076
+"G3: [36.0, 46.9)",36.0,46.9,20,19,38.4,16.0,16.39,13.49,0.0675,0.095,0.0492

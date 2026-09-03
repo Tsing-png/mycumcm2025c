@@ -1,0 +1,41 @@
+{
+  "id": "Q1",
+  "title": "Y染色体浓度与孕周数、BMI等指标的关系模型",
+  "classification": {
+    "primary_type": "descriptive/inference",
+    "secondary_type": "prediction/estimation",
+    "confidence": "medium",
+    "framing_decision_id": "q1_framing_descriptive_vs_predictive",
+    "framing_status": "DECIDED"
+  },
+  "gates": {
+    "G1_PROBLEM_FRAMED": "PASS",
+    "G2_METHOD_SCREENED": "PASS",
+    "G2.5_METHOD_CHOSEN": {
+      "status": "PASS",
+      "note": "Human chose M1 GAMM as main method"
+    },
+    "G3_CODE_REVIEWED": {
+      "status": "PASS",
+      "round": 1,
+      "artifacts": [
+        "code/Q1/q1_main.py",
+        "code/Q1/reviews/q1_python_review.json",
+        "results/Q1/experiments/round1/run_summary.json"
+      ],
+      "note": "Both M1 GAMM and M2 LME converged. Code review PASS. GAMM AIC=-5240.8 vs LME AIC=-5174.0, LR chi2=76.76 p<0.001."
+    },
+    "G4_RESULTS_FROZEN": {
+      "status": "PASS",
+      "decision_id": "q1_result_judgment",
+      "frozen_at": "2026-09-03T00:00:00Z"
+    },
+    "G5_PAPER_READY": {
+      "status": "NOT_STARTED"
+    },
+    "G6_FINAL_AUDIT": {
+      "status": "NOT_STARTED"
+    },
+    "G2.5_METHOD_CHOSEN_BY_HUMAN": "PASS"
+  }
+}

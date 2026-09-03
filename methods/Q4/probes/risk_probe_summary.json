@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "question_id": "Q4",
+  "generated_at": "2026-09-03T19:00:00+08:00",
+  "data_refs": [
+    "workspace/data/data_profile.json",
+    "workspace/data_clean/female_cleaned.csv"
+  ],
+  "methods": [
+    {
+      "id": "M1",
+      "role": "main_candidate",
+      "name": "多维马氏距离异常检测",
+      "executability": {
+        "status": "PASS",
+        "evidence": {
+          "language": "Python",
+          "dependencies": ["numpy", "scipy", "pandas"],
+          "estimated_runtime_seconds": 1.0,
+          "complete_cases": 604,
+          "total_rows": 605,
+          "note": "仅 1 条 BMI 缺失，其余特征完整"
+        }
+      },
+      "data_coverage": {
+        "status": "CONDITIONAL",
+        "evidence": {
+          "rows_used": 605,
+          "effective_sample_size_patients": 147,
+          "normal_rows": 538,
+          "abnormal_rows": 67,
+          "abnormal_rate": 0.111,
+          "abnormal_types": {
+            "T18": 33,
+            "T13T18": 11,
+            "T13": 10,
+            "T21": 9,
+            "T18T21": 2,
+            "T13T21": 2
+          },
+          "repeated_measures_mean": 4.1,
+          "missing_rate_key_features": 0.002,
+          "note": "AB列标注为外部确认结果非NIPT直接输出；同一患者不同次检测AB标签不同（如B004有T21和T13）；AE列100%健康——监督学习不可行"
+        },
+        "conditions": [
+          "正常与异常样本Z值分布高度重叠，马氏距离分离有限",
+          "AB列标签代表染色体核型确认结果，非NIPT筛查结果，标签含义需在论文中明确"
+        ]
+      },
+      "assumption_checks": [
+        {
+          "name": "multivariate_normality",
+          "status": "CONDITIONAL",
+          "metric": "covariance_condition_number",
+          "value": 27850.2,
+          "threshold": 100000,
+          "note": "条件数偏高但未超危险阈值；主要由BMI量纲差异贡献，标准化后可改善"
+        },
+        {
+          "name": "feature_correlation_structure",
+          "status": "PASS",
+          "metric": "max_pairwise_correlation",
+          "value": 0.494,
+          "note": "Z13-Z18相关0.49, Z13-ZX相关0.47, Z18-ZX相关0.45；存在有意义的相关结构支撑多维方法"
+        },
+        {
+          "name": "normal_abnormal_separability",
+          "status": "CONDITIONAL",
+          "metric": "abnormal_above_normal_p95",
+          "value": "9/67 (13.4%)",
+          "note": "马氏距离探测：异常样本均值2.57 vs 正常2.29，仅13.4%异常超正常p95(3.66)。分离度低是核心风险"
+        }
+      ],
+      "output_degeneracy": {
+        "status": "CONDITIONAL",
+        "metrics": {
+          "normal_mahal_mean": 2.29,
+          "normal_mahal_std": 0.87,
+          "normal_mahal_p95": 3.66,
+          "normal_mahal_p99": 4.83,
+          "abnormal_mahal_mean": 2.57,
+          "abnormal_mahal_std": 1.21,
+          "abnormal_mahal_max": 9.65,
+          "abnormal_above_p95": 9,
+          "abnormal_above_p99": 1,
+          "abnormal_total": 67
+        },
+        "note": "多数异常样本的马氏距离落在正常分布内，阈值选择面临召回-精确权衡：p95阈值召回13.4%，放宽阈值将大幅增加假阳性"
+      },
+      "perturbation_sensitivity": {
+        "status": "PASS",
+        "perturbation": "移除单个特征（逐一排除Z13/Z18/Z21/ZX/BMI/X浓度）",
+        "metric": "abnormal_above_p95_change",
+        "value": "待实验轮次确认，探测阶段协方差矩阵可逆且稳定",
+        "note": "协方差矩阵条件数27850，移除高条件数贡献特征（BMI）后预期改善"
+      },
+      "scale_check": {
+        "status": "PASS",
+        "representative_n": 605,
+        "runtime_seconds": 0.5,
+        "peak_memory_mb": 10,
+        "note": "605行6维数据，协方差计算和距离计算均为O(n*d^2)，无规模风险"
+      },
+      "verdict": "CONDITIONAL",
+      "conditions": [
+        "核心风险：正常/异常马氏距离分布高度重叠，p95阈值仅13.4%召回",
+        "缓解措施1：标准化特征后重估协方差，降低条件数",
+        "缓解措施2：分染色体建立子模型（仅用Z13+辅助判T13，Z18+辅助判T18，Z21+辅助判T21），减少多维稀释",
+        "缓解措施3：结合质控特征（GC含量、读段数）做预筛选，缩小候选空间"
+      ],
+      "fallback_trigger": "实验轮次中，若最优阈值下召回率<15%且假阳性率>30%，激活分染色体逐一判定fallback",
+      "evidence_refs": []
+    },
+    {
+      "id": "M2",
+      "role": "usable_baseline",
+      "name": "多维Z值联合阈值规则",
+      "executability": {
+        "status": "PASS",
+        "evidence": {
+          "language": "Python",
+          "dependencies": ["numpy", "pandas"],
+          "estimated_runtime_seconds": 0.2,
+          "complete_cases": 605,
+          "note": "纯规则方法，无需训练"
+        }
+      },
+      "data_coverage": {
+        "status": "CONDITIONAL",
+        "evidence": {
+          "rows_used": 605,
+          "normal_rows": 538,
+          "abnormal_rows": 67,
+          "single_z_threshold_recall": {
+            "Z13_abs_gt3": "3/67 (4.5%)",
+            "Z18_abs_gt3": "0/67 (0%)",
+            "Z21_abs_gt3": "1/67 (1.5%)",
+            "ZX_abs_gt3": "3/67 (4.5%)",
+            "any_above_3": "7/67 (10.4%)"
+          },
+          "note": "临床标准|Z|>3阈值在本数据上召回极低；需放宽阈值或设计联合规则"
+        },
+        "conditions": [
+          "单变量|Z|>3召回率<11%，需联合多维或放宽阈值",
+          "放宽阈值（如|Z|>2）将显著增加假阳性"
+        ]
+      },
+      "assumption_checks": [
+        {
+          "name": "z_score_interpretability",
+          "status": "PASS",
+          "note": "Z值为标准化统计量，阈值规则有临床先验支持"
+        },
+        {
+          "name": "threshold_transferability",
+          "status": "CONDITIONAL",
+          "note": "临床|Z|>3标准基于大样本，本数据集Z值分布偏移（Z18均值0.8, Z13均值0.45均非零中心），阈值可能需要数据驱动校准"
+        }
+      ],
+      "output_degeneracy": {
+        "status": "CONDITIONAL",
+        "metrics": {
+          "flagged_by_any_z_gt3": 57,
+          "flagged_normal": 50,
+          "flagged_abnormal": 7,
+          "precision_at_z3": 0.123,
+          "recall_at_z3": 0.104
+        },
+        "note": "Z>3阈值下精确率12.3%、召回率10.4%；作为基线可接受但性能低"
+      },
+      "perturbation_sensitivity": {
+        "status": "PASS",
+        "perturbation": "阈值从3.0调整到2.5",
+        "metric": "recall_change",
+        "value": "待实验确认",
+        "note": "阈值规则对参数敏感，但规则本身稳定"
+      },
+      "scale_check": {
+        "status": "PASS",
+        "representative_n": 605,
+        "runtime_seconds": 0.1,
+        "peak_memory_mb": 5
+      },
+      "verdict": "CONDITIONAL",
+      "conditions": [
+        "单变量阈值召回极低，需联合规则或放宽阈值",
+        "作为基线提供可解释的下界参照"
+      ],
+      "evidence_refs": []
+    }
+  ]
+}

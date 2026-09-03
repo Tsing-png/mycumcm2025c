@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "raw_files": [
+    "workspace/data_raw/附件.xlsx"
+  ],
+  "attachment_mapping": [
+    {
+      "file": "附件.xlsx",
+      "sheet": "男胎检测数据",
+      "mapped_to": "shared",
+      "rows": 1082,
+      "cols": 31
+    },
+    {
+      "file": "附件.xlsx",
+      "sheet": "女胎检测数据",
+      "mapped_to": "shared",
+      "rows": 605,
+      "cols": 31
+    }
+  ],
+  "fields": [
+    "序号",
+    "孕妇代码",
+    "年龄",
+    "身高",
+    "体重",
+    "末次月经",
+    "IVF妊娠",
+    "检测日期",
+    "检测抽血次数",
+    "检测孕周",
+    "BMI",
+    "原始读段数",
+    "比对比例",
+    "重复读段比例",
+    "唯一比对读段数",
+    "GC含量",
+    "13号Z值",
+    "18号Z值",
+    "21号Z值",
+    "X染色体Z值",
+    "Y染色体Z值",
+    "Y染色体浓度",
+    "X染色体浓度",
+    "13号GC含量",
+    "18号GC含量",
+    "21号GC含量",
+    "被过滤读段比例",
+    "染色体非整倍体",
+    "怀孕次数",
+    "生产次数",
+    "胎儿是否健康"
+  ],
+  "quality": {
+    "missingness": {
+      "male": {
+        "末次月经": 12,
+        "染色体非整倍体": 956
+      },
+      "female": {
+        "BMI": 1,
+        "Y染色体Z值": 605,
+        "Y染色体浓度": 605,
+        "染色体非整倍体": 538
+      }
+    },
+    "duplicates": {
+      "male_duplicate_rows": 0,
+      "female_duplicate_rows": 0
+    },
+    "impossible_values": {
+      "male": {
+        "GC含量_异常": 451,
+        "13号GC含量_异常": 1081,
+        "18号GC含量_异常": 1070,
+        "21号GC含量_异常": 450,
+        "X染色体浓度_负值": 74,
+        "13号Z值_极端": 2,
+        "18号Z值_极端": 3
+      },
+      "female": {
+        "GC含量_异常": 220,
+        "13号GC含量_异常": 603,
+        "18号GC含量_异常": 594,
+        "21号GC含量_异常": 222,
+        "X染色体浓度_负值": 405,
+        "13号Z值_极端": 3,
+        "18号Z值_极端": 1
+      }
+    },
+    "outliers": {}
+  },
+  "coverage": {
+    "rows": 1687,
+    "male_rows": 1082,
+    "female_rows": 605,
+    "effective_sample_size": {
+      "male_unique_patients": 267,
+      "female_unique_patients": 147
+    },
+    "time_range": null,
+    "time_gaps": null
+  },
+  "distribution_risks": {
+    "class_imbalance": {
+      "male_vs_female_ratio": "1082:605 (1.79:1)"
+    },
+    "rare_categories": [],
+    "high_cardinality": [],
+    "redundancy_warnings": [],
+    "concentration_metrics": {}
+  },
+  "per_question_readiness": {
+    "shared": "ready_with_warnings",
+    "notes": "GC content anomalies and negative X chromosome concentrations flagged; gestational week parsed; column names standardized"
+  },
+  "cleaned_files": [
+    "workspace/data_clean/male_cleaned.csv",
+    "workspace/data_clean/female_cleaned.csv"
+  ],
+  "unresolved_risks": [
+    "Some GC content values outside expected 40-60% range - flagged, not removed",
+    "Negative X chromosome concentrations present - flagged, not removed",
+    "Male-to-female sample ratio ~1.8:1 imbalance"
+  ]
+}

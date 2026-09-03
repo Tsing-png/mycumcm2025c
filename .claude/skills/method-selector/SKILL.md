@@ -80,10 +80,11 @@ This skill proposes and probes methods. The human chooses the method.
 
 ### 选型速查
 
+- 回归/关系建模：面板/重复测量 → LME/GLMM/GAMM（ICC>0.1 必须用）；非线性可能 → GAM/GAMM 优先于强制线性；多重共线 → LASSO/PCA 降维；有界响应 → Beta GLMM；简单基线 → Pooled OLS。
 - 预测：数据量 <15 → 灰色预测 GM(1,1)；纯时序 → ARIMA/指数平滑；多因子 → 回归/随机森林/XGBoost；非线性强 → LSTM；需不确定性 → Bootstrap。
 - 评价：专家经验 → AHP；客观数据 → 熵权法；方案距离 → TOPSIS；模糊语言 → 模糊综合；效率 → DEA；指标高度相关 → PCA+TOPSIS。
 - 优化：线性 → LP；含整数/0-1 → MIP；非线性 → 启发式；多目标 → 加权或 NSGA-II；大规模 → 遗传/模拟退火（固定种子、多次运行）。
-- 分类/聚类：小样本可解释 → 逻辑回归/SVM；追求精度 → XGBoost/RF；不知 K → DBSCAN；指定 K → K-means。
+- 分类/聚类：小样本可解释 → 逻辑回归/SVM；追求精度 → XGBoost/RF；不知 K → DBSCAN；指定 K → K-means；无正样本/极度不平衡 → 异常检测（马氏距离/Isolation Forest/LOF/one-class SVM）；多变量相关性强 → 马氏距离优于单变量阈值。
 - 机理：种群增长 → Logistic；传染病 → SIR/SEIR；捕食 → Lotka-Volterra；力学 → 牛顿方程。
 
 ### 防错速查

@@ -1,0 +1,376 @@
+{
+  "question": "Q3",
+  "robustness_checks": [
+    {
+      "check": "mc_iteration_sensitivity",
+      "claim": "MC results stabilize at n_mc >= 500",
+      "perturbation": "n_mc in {50, 100, 200, 500, 1000}",
+      "results": [
+        {
+          "n_mc": 50,
+          "elapsed_s": 0.04,
+          "optimal_weeks": [
+            12.8,
+            13.3,
+            13.3,
+            24.8
+          ],
+          "compliances": [
+            0.753,
+            0.748,
+            0.67,
+            0.95
+          ],
+          "min_risks": [
+            0.1874,
+            0.2001,
+            0.2563,
+            0.3294
+          ]
+        },
+        {
+          "n_mc": 100,
+          "elapsed_s": 0.09,
+          "optimal_weeks": [
+            12.7,
+            13.0,
+            12.8,
+            13.0
+          ],
+          "compliances": [
+            0.752,
+            0.746,
+            0.661,
+            0.53
+          ],
+          "min_risks": [
+            0.1865,
+            0.1958,
+            0.2523,
+            0.3472
+          ]
+        },
+        {
+          "n_mc": 200,
+          "elapsed_s": 0.18,
+          "optimal_weeks": [
+            13.4,
+            13.2,
+            12.9,
+            13.9
+          ],
+          "compliances": [
+            0.769,
+            0.738,
+            0.642,
+            0.576
+          ],
+          "min_risks": [
+            0.1885,
+            0.2052,
+            0.2667,
+            0.3325
+          ]
+        },
+        {
+          "n_mc": 500,
+          "elapsed_s": 0.42,
+          "optimal_weeks": [
+            13.0,
+            13.0,
+            13.1,
+            12.9
+          ],
+          "compliances": [
+            0.757,
+            0.736,
+            0.656,
+            0.524
+          ],
+          "min_risks": [
+            0.1882,
+            0.2034,
+            0.2605,
+            0.3493
+          ]
+        },
+        {
+          "n_mc": 1000,
+          "elapsed_s": 0.86,
+          "optimal_weeks": [
+            12.9,
+            13.1,
+            13.3,
+            13.7
+          ],
+          "compliances": [
+            0.755,
+            0.737,
+            0.66,
+            0.551
+          ],
+          "min_risks": [
+            0.188,
+            0.2038,
+            0.2629,
+            0.3465
+          ]
+        }
+      ],
+      "convergence": [
+        {
+          "n_mc": 50,
+          "max_diff_vs_1000": 11.1,
+          "mean_diff_vs_1000": 2.85
+        },
+        {
+          "n_mc": 100,
+          "max_diff_vs_1000": 0.7,
+          "mean_diff_vs_1000": 0.38
+        },
+        {
+          "n_mc": 200,
+          "max_diff_vs_1000": 0.5,
+          "mean_diff_vs_1000": 0.3
+        },
+        {
+          "n_mc": 500,
+          "max_diff_vs_1000": 0.8,
+          "mean_diff_vs_1000": 0.3
+        },
+        {
+          "n_mc": 1000,
+          "max_diff_vs_1000": 0.0,
+          "mean_diff_vs_1000": 0.0
+        }
+      ],
+      "status": "PASS",
+      "limitation": "MC with small samples does not guarantee independent replications; bootstrap and MC test different stability dimensions"
+    },
+    {
+      "check": "residual_decomposition_stability",
+      "claim": "weight ~ BMI + height decomposition is stable under resampling",
+      "perturbation": "50-fold bootstrap of weight regression",
+      "results": {
+        "n_bootstrap": 50,
+        "n_success": 50,
+        "coef_bmi_mean": 2.624,
+        "coef_bmi_std": 0.011,
+        "coef_bmi_ci95": [
+          2.5975,
+          2.6437
+        ],
+        "coef_height_mean": 1.0416,
+        "coef_height_std": 0.0055,
+        "r2_mean": 0.9972,
+        "r2_std": 0.0003,
+        "original_bmi_coef": 2.6258,
+        "original_height_coef": 1.0413,
+        "original_in_ci": true,
+        "vif_max_bootstrap_mean": 1.008,
+        "vif_max_bootstrap_max": 1.018
+      },
+      "status": "PASS",
+      "limitation": "Bootstrap resampling preserves original correlation structure; does not test sensitivity to a genuinely different population"
+    },
+    {
+      "check": "grouping_scheme_sensitivity",
+      "claim": "Core groups (BMI 20-36) yield similar optimal timing across schemes",
+      "perturbation": "2/3/4/5-group schemes with different BMI boundaries",
+      "results": [
+        {
+          "scheme": "3_groups",
+          "n_groups": 3,
+          "groups": [
+            {
+              "group": "[20,30)",
+              "n": 76,
+              "optimal_week": 13.1,
+              "compliance": 0.757,
+              "min_risk": 0.1901
+            },
+            {
+              "group": "[30,36)",
+              "n": 171,
+              "optimal_week": 13.1,
+              "compliance": 0.753,
+              "min_risk": 0.1929
+            },
+            {
+              "group": "[36,+inf)",
+              "n": 20,
+              "optimal_week": 13.0,
+              "compliance": 0.62,
+              "min_risk": 0.2844
+            }
+          ],
+          "optimal_weeks": [
+            13.1,
+            13.1,
+            13.0
+          ]
+        },
+        {
+          "scheme": "4_groups_ref",
+          "n_groups": 4,
+          "groups": [
+            {
+              "group": "[20,32)",
+              "n": 152,
+              "optimal_week": 13.4,
+              "compliance": 0.769,
+              "min_risk": 0.1885
+            },
+            {
+              "group": "[32,36)",
+              "n": 95,
+              "optimal_week": 13.2,
+              "compliance": 0.738,
+              "min_risk": 0.2052
+            },
+            {
+              "group": "[36,40)",
+              "n": 16,
+              "optimal_week": 12.9,
+              "compliance": 0.642,
+              "min_risk": 0.2667
+            },
+            {
+              "group": "[40,+inf)",
+              "n": 4,
+              "optimal_week": 13.9,
+              "compliance": 0.576,
+              "min_risk": 0.3325
+            }
+          ],
+          "optimal_weeks": [
+            13.4,
+            13.2,
+            12.9,
+            13.9
+          ]
+        },
+        {
+          "scheme": "4_groups_alt",
+          "n_groups": 4,
+          "groups": [
+            {
+              "group": "[20,28)",
+              "n": 5,
+              "optimal_week": 13.3,
+              "compliance": 0.692,
+              "min_risk": 0.2409
+            },
+            {
+              "group": "[28,34)",
+              "n": 212,
+              "optimal_week": 12.8,
+              "compliance": 0.751,
+              "min_risk": 0.1888
+            },
+            {
+              "group": "[34,40)",
+              "n": 46,
+              "optimal_week": 13.3,
+              "compliance": 0.699,
+              "min_risk": 0.2359
+            },
+            {
+              "group": "[40,+inf)",
+              "n": 4,
+              "optimal_week": 13.9,
+              "compliance": 0.576,
+              "min_risk": 0.3325
+            }
+          ],
+          "optimal_weeks": [
+            13.3,
+            12.8,
+            13.3,
+            13.9
+          ]
+        },
+        {
+          "scheme": "5_groups",
+          "n_groups": 5,
+          "groups": [
+            {
+              "group": "[20,28)",
+              "n": 5,
+              "optimal_week": 13.3,
+              "compliance": 0.692,
+              "min_risk": 0.2409
+            },
+            {
+              "group": "[28,32)",
+              "n": 147,
+              "optimal_week": 13.0,
+              "compliance": 0.765,
+              "min_risk": 0.1831
+            },
+            {
+              "group": "[32,36)",
+              "n": 95,
+              "optimal_week": 13.2,
+              "compliance": 0.738,
+              "min_risk": 0.2052
+            },
+            {
+              "group": "[36,40)",
+              "n": 16,
+              "optimal_week": 12.9,
+              "compliance": 0.642,
+              "min_risk": 0.2667
+            },
+            {
+              "group": "[40,+inf)",
+              "n": 4,
+              "optimal_week": 13.9,
+              "compliance": 0.576,
+              "min_risk": 0.3325
+            }
+          ],
+          "optimal_weeks": [
+            13.3,
+            13.0,
+            13.2,
+            12.9,
+            13.9
+          ]
+        },
+        {
+          "scheme": "2_groups",
+          "n_groups": 2,
+          "groups": [
+            {
+              "group": "[20,33)",
+              "n": 185,
+              "optimal_week": 12.6,
+              "compliance": 0.746,
+              "min_risk": 0.189
+            },
+            {
+              "group": "[33,+inf)",
+              "n": 82,
+              "optimal_week": 12.9,
+              "compliance": 0.702,
+              "min_risk": 0.2254
+            }
+          ],
+          "optimal_weeks": [
+            12.6,
+            12.9
+          ]
+        }
+      ],
+      "status": "PASS",
+      "limitation": "All schemes use the same underlying model; group-specific effects may differ with alternative models"
+    }
+  ],
+  "seed": 42,
+  "figures": [
+    "q3_mc_convergence.png",
+    "q3_decomposition_bootstrap.png",
+    "q3_grouping_sensitivity.png"
+  ]
+}

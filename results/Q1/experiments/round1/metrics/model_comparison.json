@@ -1,0 +1,30 @@
+{
+  "models": [
+    {
+      "model": "M1_GAMM",
+      "log_likelihood": 2632.4,
+      "n_fe": 8,
+      "n_params": 12,
+      "AIC": -5240.8,
+      "BIC": -5180.96,
+      "RMSE": 0.010079,
+      "MAE": 0.007039
+    },
+    {
+      "model": "M2_LME",
+      "log_likelihood": 2594.02,
+      "n_fe": 3,
+      "n_params": 7,
+      "AIC": -5174.04,
+      "BIC": -5139.13,
+      "RMSE": 0.011076,
+      "MAE": 0.0077
+    }
+  ],
+  "lr_test": {
+    "chi2": 76.76,
+    "df": 5,
+    "p_value": 0.0
+  },
+  "icc": 0.6002
+}

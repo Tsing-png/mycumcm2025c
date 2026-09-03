@@ -1,0 +1,47 @@
+{
+  "question": "Q3",
+  "round": 1,
+  "language": "python",
+  "reviewed_files": ["code/Q3/q3_main.py"],
+  "checks": {
+    "syntax": {
+      "status": "PASS",
+      "evidence": "Script ran to completion without syntax errors on Python 3.14.5"
+    },
+    "input_contract": {
+      "status": "PASS",
+      "evidence": "Reads male_cleaned.csv with explicit encoding='utf-8-sig'; renames columns consistently; dropna on required columns; checks patient count matches expectation (267)"
+    },
+    "method_alignment": {
+      "status": "PASS",
+      "evidence": "M1 implements approved formula: y_conc ~ bs(gest_week,df=4) + bs(bmi,df=3) + age + weight_resid + (1+gest_week|patient). M2 implements baseline: same splines + age + bmi_age interaction. Residual decomposition via OLS(weight ~ bmi + height). Risk function R(t,g) = 0.3*late_risk(t) + 0.7*(1-compliance_rate(t,g)) with threshold=0.04. MC error propagation with 500 iterations."
+    },
+    "reproducibility": {
+      "status": "PASS",
+      "evidence": "SEED=42 set globally via np.random.seed(42); per-group MC uses RandomState(SEED+g_idx) for deterministic results; all outputs saved to files; environment recorded in run_summary.json"
+    },
+    "output_contract": {
+      "status": "PASS",
+      "evidence": "run_summary.json contains all required fields: question, round, decision_id, methods with status/metrics/diagnostics, model_comparison, vif_analysis, bmi_groups, mc_error_analysis, risk_function, seed, environment, inputs, outputs, degeneracy_check, fallback_trigger, warnings, errors. All tables/figures/metrics saved to correct directories."
+    }
+  },
+  "issues": [
+    {
+      "severity": "info",
+      "description": "scipy.optimize.minimize_scalar imported but not used",
+      "recommendation": "Remove unused import for cleanliness"
+    },
+    {
+      "severity": "info",
+      "description": "LR test df=0 because M1 and M2 have same n_params=14, yielding p=NaN",
+      "recommendation": "Models are not nested (different covariates: weight_resid vs bmi_age), so LR test is not strictly valid. AIC/BIC comparison is the correct metric here. Document this in paper."
+    },
+    {
+      "severity": "warning",
+      "description": "BMI>=40 group has only n=4 patients. MC CI95=[11.0, 24.6] spans nearly the entire detection window.",
+      "recommendation": "Flag this clearly in results and paper. Consider merging with [36,40) group for robustness."
+    }
+  ],
+  "verdict": "PASS",
+  "reviewed_at": "2026-09-03T00:00:00Z"
+}

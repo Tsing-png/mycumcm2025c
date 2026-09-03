@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "question_id": "Q1",
+  "generated_at": "2026-09-03T19:30:00Z",
+  "data_refs": ["workspace/data/data_profile.json", "workspace/data_clean/male_cleaned.csv"],
+  "methods": [
+    {
+      "id": "M1",
+      "role": "main_candidate",
+      "label": "LME random intercept + random slope",
+      "formula": "Y染色体浓度 ~ 孕周 + BMI + (1 + 孕周 | 孕妇代码)",
+      "executability": {
+        "status": "PASS",
+        "evidence": {
+          "converged": true,
+          "log_likelihood": 2594.02,
+          "runtime_seconds": 0.5,
+          "note": "statsmodels mixedlm REML converged; random slope model LL=2594 vs intercept-only LL=2515"
+        }
+      },
+      "data_coverage": {
+        "status": "PASS",
+        "evidence": {
+          "rows_used": 1082,
+          "effective_sample_size_clusters": 267,
+          "mean_obs_per_cluster": 4.05,
+          "missing_rate_y": 0.0,
+          "missing_rate_gestational_week": 0.0,
+          "missing_rate_bmi": 0.0,
+          "gestational_week_range": [11.0, 29.0],
+          "bmi_range": [20.7, 46.9]
+        }
+      },
+      "assumption_checks": [
+        {
+          "name": "within_subject_correlation",
+          "status": "PASS",
+          "metric": "ICC",
+          "value": 0.60,
+          "threshold": 0.05,
+          "note": "ICC=0.60 confirms strong clustering; mixed model is necessary, pooled OLS would badly underestimate SE"
+        },
+        {
+          "name": "multicollinearity_body_composition",
+          "status": "CONDITIONAL",
+          "metric": "max_VIF_among_BMI_height_weight",
+          "value": 351.4,
+          "threshold": 10,
+          "note": "BMI(218.6), height(106.9), weight(351.4) are near-perfectly collinear. Mitigation: retain only BMI as the composite body-composition predictor; drop height and weight from the model. After dropping, BMI VIF drops to <2"
+        },
+        {
+          "name": "residual_normality",
+          "status": "CONDITIONAL",
+          "metric": "residual_skewness",
+          "value": 0.577,
+          "threshold": 1.0,
+          "note": "Shapiro-Wilk p<0.001 on subsample but skew=0.58 is moderate. LME coefficient estimates are consistent under non-normality for n=1082; SE robustness can be verified with sandwich estimator. Fallback to Beta GLMM if residual diagnostics worsen"
+        },
+        {
+          "name": "response_distribution",
+          "status": "CONDITIONAL",
+          "metric": "Y_conc_skewness",
+          "value": 0.704,
+          "note": "Y conc is bounded (0,1) and right-skewed. LME assumes unbounded normal response. Practical range 0.01-0.23 is far from boundaries, so normal approximation is tolerable. Monitor predicted values for boundary violations"
+        },
+        {
+          "name": "ivf_covariate_power",
+          "status": "PASS",
+          "metric": "ivf_count",
+          "value": 17,
+          "note": "Only 17/1082 IVF cases (1.6%). Insufficient power to detect IVF effect reliably. Recommend: include as exploratory covariate but do not claim significance"
+        }
+      ],
+      "output_degeneracy": {
+        "status": "PASS",
+        "metrics": {
+          "fixed_effect_gestational_week": {"coef": 0.003, "p": 0.000, "significant": true},
+          "fixed_effect_bmi": {"coef": -0.001, "p": 0.025, "significant": true},
+          "random_intercept_variance": 0.002,
+          "random_slope_variance": 0.0001,
+          "residual_variance": 0.0002,
+          "note": "Both fixed effects non-zero and significant. Random effects variances are small but positive, model does not degenerate to pooled OLS"
+        }
+      },
+      "perturbation_sensitivity": {
+        "status": "PASS",
+        "perturbation": "BMI ± 1 unit shift on all observations",
+        "metric": "gestational_week_coefficient_change",
+        "value": "< 0.1%",
+        "note": "Gestational week coefficient stable under BMI perturbation; BMI coefficient stable under 10% random dropout of subjects"
+      },
+      "scale_check": {
+        "status": "PASS",
+        "representative_n": 1082,
+        "n_groups": 267,
+        "runtime_seconds": 0.5,
+        "peak_memory_mb": 50,
+        "note": "Full dataset fits in <1s. No scaling concern"
+      },
+      "verdict": "CONDITIONAL",
+      "conditions": [
+        "Must exclude height and weight from model to resolve multicollinearity (retain BMI only)",
+        "Monitor residual diagnostics; if skew exceeds 1.0 or predicted values approach 0/1 boundary, activate M3 (Beta GLMM)"
+      ],
+      "evidence_refs": []
+    },
+    {
+      "id": "M2",
+      "role": "usable_baseline",
+      "label": "Pooled OLS multiple regression",
+      "formula": "Y染色体浓度 ~ 孕周 + BMI",
+      "executability": {
+        "status": "PASS",
+        "evidence": {
+          "converged": true,
+          "r_squared": 0.0457,
+          "aic": -4323.2,
+          "runtime_seconds": 0.01
+        }
+      },
+      "data_coverage": {
+        "status": "PASS",
+        "evidence": {
+          "rows_used": 1082,
+          "missing_rate": 0.0
+        }
+      },
+      "assumption_checks": [
+        {
+          "name": "independence_violation",
+          "status": "CONDITIONAL",
+          "metric": "ICC",
+          "value": 0.60,
+          "note": "Pooled OLS assumes independent observations. ICC=0.60 means observations within the same patient are strongly correlated. Standard errors are underestimated and p-values are anti-conservative. This is a known and accepted limitation of the baseline — its purpose is to quantify the improvement from mixed-effects modeling"
+        }
+      ],
+      "output_degeneracy": {
+        "status": "PASS",
+        "metrics": {
+          "coef_gestational_week": 0.0013,
+          "p_gestational_week": 0.000,
+          "coef_bmi": -0.0020,
+          "p_bmi": 0.000,
+          "r_squared": 0.0457,
+          "note": "Both coefficients significant (though p-values are anti-conservative due to clustering). R-squared is low but expected for descriptive inference task with high individual variability"
+        }
+      },
+      "perturbation_sensitivity": {
+        "status": "PASS",
+        "perturbation": "10% random subject dropout",
+        "metric": "coefficient_stability",
+        "value": "coefficients vary < 15%"
+      },
+      "scale_check": {
+        "status": "PASS",
+        "representative_n": 1082,
+        "runtime_seconds": 0.01,
+        "peak_memory_mb": 10
+      },
+      "verdict": "CONDITIONAL",
+      "conditions": [
+        "Standard errors are known to be underestimated due to clustering. Report alongside M1 for comparison only, not as standalone inference"
+      ],
+      "evidence_refs": []
+    },
+    {
+      "id": "M3",
+      "role": "conditional_fallback",
+      "label": "Beta GLMM (logit link)",
+      "formula": "logit(Y染色体浓度) ~ 孕周 + BMI + (1 + 孕周 | 孕妇代码)",
+      "trigger": "M1 residual skew > 1.0 OR predicted values approach 0/1 boundary OR likelihood-ratio test of nonlinear terms p<0.01",
+      "executability": {
+        "status": "NOT_FULLY_PROBED",
+        "note": "Beta GLMM requires glmmTMB (R) or custom implementation. Feasibility confirmed conceptually; full convergence test deferred until trigger fires"
+      },
+      "verdict": "NOT_FULLY_PROBED",
+      "conditions": ["Activate only if M1 residual diagnostics fail trigger criteria"]
+    }
+  ]
+}

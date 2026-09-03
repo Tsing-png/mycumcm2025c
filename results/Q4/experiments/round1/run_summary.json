@@ -1,0 +1,93 @@
+{
+  "decision_id": "q4_method_choice",
+  "round": 1,
+  "methods": {
+    "M1_main": {
+      "id": "M1",
+      "role": "main_candidate",
+      "name": "Multivariate Mahalanobis Distance Anomaly Detection",
+      "status": "success",
+      "elapsed_s": 3.66,
+      "best_result": {
+        "threshold": 2.9968,
+        "recall": 0.2687,
+        "precision": 0.1818,
+        "f1": 0.2169,
+        "tp": 18,
+        "fp": 81,
+        "fn": 49,
+        "tn": 456,
+        "fpr": 0.1508,
+        "n_flagged": 99,
+        "threshold_type": "p85"
+      },
+      "auc_roc": 0.5741,
+      "auc_pr": 0.1626
+    },
+    "M2_baseline": {
+      "id": "M2",
+      "role": "usable_baseline",
+      "name": "Multivariate Z-value Joint Threshold Rules",
+      "status": "success",
+      "elapsed_s": 2.28,
+      "best_result": {
+        "recall": 0.4776,
+        "precision": 0.1063,
+        "f1": 0.1739,
+        "tp": 32,
+        "fp": 269,
+        "fn": 35,
+        "tn": 269,
+        "fpr": 0.5,
+        "n_flagged": 301,
+        "threshold": 3.7766,
+        "threshold_type": "p50",
+        "strategy": "z_squared_sum"
+      },
+      "auc_roc": 0.492
+    }
+  },
+  "comparison_auc": {
+    "m1_mahalanobis": 0.5741,
+    "m2_z2sum": 0.4914
+  },
+  "inputs": [
+    "workspace/data_clean/female_cleaned.csv"
+  ],
+  "outputs": {
+    "figures": [
+      "q4_m1_roc_comparison.png",
+      "q4_m1_distance_distribution.png",
+      "q4_m1_precision_recall.png",
+      "q4_m1_feature_scatter.png",
+      "q4_m2_roc.png",
+      "q4_m2_z_distributions.png",
+      "q4_m1_vs_m2_roc.png"
+    ],
+    "tables": [
+      "q4_m1_distances.csv",
+      "q4_m1_per_type_detection.csv"
+    ],
+    "metrics": [
+      "q4_m1_metrics.json",
+      "q4_m2_metrics.json"
+    ]
+  },
+  "seed": 42,
+  "environment": {
+    "python": "3.14.5"
+  },
+  "total_elapsed_s": 5.95,
+  "degeneracy_check": {
+    "all_normal": false,
+    "all_anomaly": false,
+    "verdict": "PASS"
+  },
+  "fallback_trigger": {
+    "condition": "M1 recall < 15% and FPR > 30% at best threshold",
+    "m1_recall": 0.2687,
+    "triggered": false
+  },
+  "warnings": [],
+  "errors": []
+}

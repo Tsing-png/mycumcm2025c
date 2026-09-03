@@ -1,0 +1,243 @@
+\section{问题三的建立与求解}
+
+问题一和问题二的模型仅纳入孕周与BMI两个因素。问题三进一步考察年龄和体重对Y染色体浓度预测的增量贡献，并在多因素框架下重新优化分组检测时点。由于体重、身高与BMI之间存在严重的多重共线性，直接纳入将导致参数估计不稳定，需要先进行变量解耦。
+
+\subsection{多重共线性诊断与残差分解}
+
+\subsubsection{共线性诊断}
+
+将体重、身高、BMI和年龄同时纳入线性模型，计算各变量的方差膨胀因子（VIF）。VIF衡量自变量间线性相关对回归系数方差的放大倍数，定义为
+\begin{equation}\label{eq:vif}
+  \mathrm{VIF}_k = \frac{1}{1 - R_k^2}
+\end{equation}
+
+其中$R_k^2$为第$k$个自变量对其余自变量回归的决定系数。通常以$\mathrm{VIF} > 10$作为严重共线性的判据。原始变量的VIF结果如表~\ref{tab:vif_before}所示。
+
+\begin{table}[H]
+  \caption{残差分解前各变量的VIF}
+  \label{tab:vif_before}
+  \centering
+  \begin{tabular}{lcccc}
+    \hline
+    变量 & BMI & 身高 & 体重 & 年龄 \\
+    \hline
+    VIF & 218.6 & 106.9 & 351.3 & 1.01 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+BMI、身高和体重三者的VIF均远超10，直接建模将使系数估计高度不稳定。
+
+\subsubsection{残差分解策略}
+
+为保留体重中独立于BMI和身高的信息，本文采用残差分解法。将体重对BMI和身高进行辅助回归
+\begin{equation}\label{eq:resid_decomp}
+  \text{weight}_i = \gamma_0 + \gamma_1 \cdot \mathrm{BMI}_i + \gamma_2 \cdot \text{height}_i + e_i
+\end{equation}
+
+残差$e_i$即为体重中无法被BMI和身高线性解释的部分，记为$\text{weight\_resid}_i$。以BMI、年龄和$\text{weight\_resid}$替换原始变量后，重新计算VIF，结果如表~\ref{tab:vif_after}所示。
+
+\begin{table}[H]
+  \caption{残差分解后各变量的VIF}
+  \label{tab:vif_after}
+  \centering
+  \begin{tabular}{lccc}
+    \hline
+    变量 & BMI & 年龄 & weight\_resid \\
+    \hline
+    VIF & 1.00 & 1.01 & 1.01 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+分解后所有VIF均接近1，共线性问题完全消除。图~\ref{fig:vif_comparison}直观展示了分解前后VIF的对比。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{Q3/experiments/round1/figures/q3_vif_comparison.png}
+  \caption{残差分解前后各变量VIF对比}
+  \label{fig:vif_comparison}
+\end{figure}
+
+\subsection{多因素GAMM模型}
+
+\subsubsection{模型建立}
+
+在问题一GAMM的基础上，将年龄和体重残差作为线性固定效应纳入，建立\textbf{多因素广义加性混合模型（Multi-factor GAMM，记为M1）}
+\begin{equation}\label{eq:gamm_q3}
+  y_{ij} = \beta_0 + s_1(t_{ij}) + s_2(\mathrm{BMI}_i) + \beta_3 \cdot \text{age}_i + \beta_4 \cdot \text{weight\_resid}_i + b_{0i} + b_{1i}\,t_{ij} + \varepsilon_{ij}
+\end{equation}
+
+其中各成分含义如下。
+
+\begin{itemize}
+  \item $s_1(\cdot)$、$s_2(\cdot)$分别为孕周和BMI的非线性平滑函数，沿用问题一的B样条基设定；
+  \item $\beta_3$为年龄的线性效应系数；
+  \item $\beta_4$为体重残差的线性效应系数；
+  \item $b_{0i}$、$b_{1i}$分别为随机截距和随机斜率，刻画个体异质性；
+  \item $\varepsilon_{ij} \sim N(0,\,\sigma^2_\varepsilon)$为观测误差。
+\end{itemize}
+
+作为对照，建立\textbf{基准模型（M2）}，仅保留年龄和BMI与年龄的交互项
+\begin{equation}\label{eq:gamm_q3_m2}
+  y_{ij} = \beta_0 + s_1(t_{ij}) + s_2(\mathrm{BMI}_i) + \beta_3 \cdot \text{age}_i + \beta_5 \cdot (\mathrm{BMI}_i \times \text{age}_i) + b_{0i} + b_{1i}\,t_{ij} + \varepsilon_{ij}
+\end{equation}
+
+\subsubsection{模型求解与比较}
+
+模型估计按以下步骤执行。
+
+\textbf{Step 1}（残差分解）\quad 对267名孕妇的体重执行式~\eqref{eq:resid_decomp}的辅助回归，提取残差$\text{weight\_resid}$，与BMI、年龄共同构成正交化自变量集。
+
+\textbf{Step 2}（参数估计）\quad 采用REML估计M1和M2的方差成分与固定效应参数，平滑函数的惩罚参数通过广义交叉验证（GCV）自动选取。
+
+\textbf{Step 3}（信息准则比较）\quad 分别计算两个模型的AIC，评估新增变量的预测增益。
+
+\textbf{Step 4}（系数显著性检验）\quad 对M1中年龄和体重残差的线性系数进行$t$检验，判断其统计显著性。
+
+模型比较结果如表~\ref{tab:q3_model_compare}所示。
+
+\begin{table}[H]
+  \caption{多因素GAMM模型比较}
+  \label{tab:q3_model_compare}
+  \centering
+  \begin{tabular}{lcc}
+    \hline
+    模型 & 描述 & AIC \\
+    \hline
+    M1 & GAMM + age + weight\_resid & $-5214.43$ \\
+    M2 & GAMM + age + BMI$\times$age & $-5208.70$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+M1的AIC略优于M2，但两者差距仅为5.73，改善幅度有限。M1中新增线性项的系数估计如表~\ref{tab:q3_coef}所示。
+
+\begin{table}[H]
+  \caption{M1模型中年龄与体重残差的系数估计}
+  \label{tab:q3_coef}
+  \centering
+  \begin{tabular}{lccc}
+    \hline
+    变量 & 系数 & 标准误 & $p$值 \\
+    \hline
+    age & $-0.000491$ & $0.000482$ & 0.309 \\
+    weight\_resid & $-0.001020$ & $0.002514$ & 0.685 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+两个变量的$p$值均远大于0.05，未达到统计显著性。BMI的非线性样条效应在M1中仍为最主要的预测成分，其有效自由度和$F$统计量与问题一模型基本一致。
+
+这一结果表明，在已纳入BMI非线性效应的条件下，年龄和体重（扣除BMI和身高的线性贡献后）对Y染色体浓度不具有显著的额外预测能力。BMI已充分捕获了体脂水平对胎儿游离DNA稀释效应的影响。
+
+\subsection{达标比例与风险优化}
+
+\subsubsection{风险函数构建}
+
+问题二的最优时点仅基于群体预测均值确定，未考虑个体间预测分布的离散程度。为更全面地权衡检测时机，本文定义达标比例（compliance rate）为BMI分组$g$在孕周$t$时，预测Y染色体浓度不低于检测阈值$c=0.04$的个体占比
+\begin{equation}\label{eq:compliance}
+  P(y \geq 0.04 \mid t,\, g) = \frac{1}{N_g} \sum_{i \in g} \mathbf{1}\!\left[\hat{y}_i(t) \geq 0.04\right]
+\end{equation}
+
+其中$\hat{y}_i(t)$由GAMM预测均值叠加随机效应采样和残差噪声生成，通过Monte Carlo模拟获得。
+
+同时定义延迟检测风险$R_{\text{late}}(t)$为分段线性函数
+\begin{equation}\label{eq:late_risk}
+  R_{\text{late}}(t) = \begin{cases}
+    0, & t \leq 12 \\[4pt]
+    \displaystyle\frac{0.5\,(t-12)}{20-12}, & 12 < t \leq 20 \\[6pt]
+    \displaystyle 0.5 + \frac{0.5\,(t-20)}{25-20}, & 20 < t \leq 25
+  \end{cases}
+\end{equation}
+
+该函数反映临床实践中检测时点越晚，后续干预窗口越窄所带来的风险递增。综合两项指标，构建加权风险函数
+\begin{equation}\label{eq:risk_func}
+  R(t,\,g) = 0.3 \cdot R_{\text{late}}(t) + 0.7 \cdot \bigl(1 - P(y \geq 0.04 \mid t,\,g)\bigr)
+\end{equation}
+
+权重分配体现了达标比例（即检测灵敏度）对NIPT决策的优先地位，同时兼顾延迟风险的临床约束。
+
+\subsubsection{分组优化结果}
+
+沿用问题二的临床知情BMI分组策略（最小组容量$n_{\min}=10$），将267名孕妇划分为4组，对每组在$t \in [11, 25]$周的网格上逐点计算$R(t,g)$，取最小值对应的孕周为最优检测时点。结果如表~\ref{tab:q3_optimal}所示。
+
+\begin{table}[H]
+  \caption{各BMI组的最优检测时点与达标比例}
+  \label{tab:q3_optimal}
+  \centering
+  \begin{tabular}{ccccc}
+    \hline
+    BMI分组 & 样本量 & 最优孕周 & 达标比例 & 最小风险值 \\
+    \hline
+    $[20, 32)$ & 152 & 12.8 & 75.3\% & 0.187 \\
+    $[32, 36)$ & 95  & 13.3 & 74.8\% & 0.200 \\
+    $[36, 40)$ & 16  & 13.3 & 67.0\% & 0.256 \\
+    $[40, +\infty)$ & 4 & 24.8 & 95.0\% & 0.329 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+前三组的最优时点集中在12.8至13.3周，与问题二的结论基本吻合。BMI$\geq$40组的最优时点被推迟至24.8周，原因在于该组胎儿游离DNA浓度增长极为缓慢，在12至20周区间内达标比例始终偏低，风险函数直到接近观测窗口上限才取得最小值。图~\ref{fig:compliance_curves}展示了各组达标比例随孕周的变化趋势。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{Q3/experiments/round1/figures/q3_compliance_curves.png}
+  \caption{各BMI组达标比例随孕周变化曲线}
+  \label{fig:compliance_curves}
+\end{figure}
+
+\subsection{Monte Carlo误差传播分析}
+
+\subsubsection{分析动机与方法}
+
+上述最优时点的确定依赖于GAMM的点估计和固定的残差方差$\sigma^2_\varepsilon$。测量噪声的实际水平存在不确定性，可能影响达标比例的计算进而改变最优时点的位置。为量化这一不确定性，本文采用Monte Carlo误差传播方法，在不同噪声水平下重复优化过程，获得最优时点的经验分布。
+
+具体步骤如下。
+
+\textbf{Step 1}（噪声扰动）\quad 设模型估计的残差标准差为$\hat{\sigma}_\varepsilon$。在每次Monte Carlo迭代中，从均匀分布$U(0.5,\,1.5)$中抽取缩放因子$\lambda$，将残差标准差设为$\lambda \hat{\sigma}_\varepsilon$，模拟测量精度在$0.5$倍至$1.5$倍范围内波动的情形。
+
+\textbf{Step 2}（重新优化）\quad 在扰动后的噪声水平下，重新执行达标比例的Monte Carlo模拟，并对每个BMI组重新搜索使式~\eqref{eq:risk_func}最小的孕周。
+
+\textbf{Step 3}（分布统计）\quad 重复上述过程500次，收集每个BMI组最优时点的经验分布，计算均值、标准差和95\%置信区间。
+
+\subsubsection{误差传播结果}
+
+500次Monte Carlo迭代的结果如表~\ref{tab:q3_mc}所示。
+
+\begin{table}[H]
+  \caption{Monte Carlo误差传播下各BMI组最优时点的分布统计}
+  \label{tab:q3_mc}
+  \centering
+  \begin{tabular}{ccccc}
+    \hline
+    BMI分组 & 均值（周） & 标准差（周） & 95\%置信区间 \\
+    \hline
+    $[20, 32)$      & 13.02 & 0.64 & $[11.94,\; 14.34]$ \\
+    $[32, 36)$      & 13.17 & 0.81 & $[11.94,\; 15.00]$ \\
+    $[36, 40)$      & 14.47 & 3.04 & $[11.38,\; 23.64]$ \\
+    $[40, +\infty)$ & 16.15 & 4.75 & $[11.00,\; 24.58]$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+图~\ref{fig:mc_distributions}展示了各组最优时点在500次迭代中的经验分布。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{Q3/experiments/round1/figures/q3_mc_timepoint_distributions.png}
+  \caption{Monte Carlo模拟下各BMI组最优检测时点的经验分布}
+  \label{fig:mc_distributions}
+\end{figure}
+
+BMI在$[20, 32)$和$[32, 36)$两组的最优时点分布集中，标准差分别为0.64周和0.81周，95\%置信区间宽度不超过3.1周，表明这两组的时点推荐具有良好的稳健性。BMI在$[36, 40)$组的标准差增至3.04周，置信区间跨度达12.3周，推荐精度明显下降。BMI$\geq$40组的置信区间从11.0周延伸至24.6周，跨度达13.6周，最优时点在测量噪声扰动下几乎不可确定。该组仅包含4名孕妇，样本量的严重不足是导致估计不稳定的根本原因。
+
+\subsection{实际意义}
+
+问题三的分析为NIPT临床实践提供了三项定量依据。
+
+第一，年龄和体重（在控制BMI之后）对Y染色体浓度不具有显著的额外预测能力。临床采集BMI即可充分刻画母体因素对胎儿游离DNA稀释效应的影响，无需额外采集或建模其他人体测量指标，可简化检测前的信息采集流程。
+
+第二，BMI低于36的孕妇群体（占样本的92.5\%），基于达标比例与延迟风险联合优化的最优检测时点稳定在12.8至13.3周，Monte Carlo分析确认该推荐在测量噪声波动下具有充分的可靠性。
+
+第三，BMI$\geq$36尤其是BMI$\geq$40的高BMI群体，最优时点的不确定性极大，当前样本量不足以支撑可靠的时点推荐。对这部分人群，建议在扩大样本的前提下重新评估，同时在临床决策中对单一模型输出保持审慎态度。

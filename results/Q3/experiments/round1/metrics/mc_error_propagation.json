@@ -1,0 +1,70 @@
+{
+  "n_iterations": 500,
+  "sigma_meas": 0.010096,
+  "results": [
+    {
+      "group": "[20,32)",
+      "optimal_week_mean": 13.02,
+      "optimal_week_std": 0.64,
+      "optimal_week_ci95": [
+        11.94,
+        14.34
+      ],
+      "compliance_mean": 0.789,
+      "compliance_std": 0.032,
+      "compliance_ci95": [
+        0.717,
+        0.849
+      ],
+      "sigma_meas": 0.010096
+    },
+    {
+      "group": "[32,36)",
+      "optimal_week_mean": 13.17,
+      "optimal_week_std": 0.81,
+      "optimal_week_ci95": [
+        11.94,
+        15.0
+      ],
+      "compliance_mean": 0.777,
+      "compliance_std": 0.041,
+      "compliance_ci95": [
+        0.705,
+        0.853
+      ],
+      "sigma_meas": 0.010096
+    },
+    {
+      "group": "[36,40)",
+      "optimal_week_mean": 14.47,
+      "optimal_week_std": 3.04,
+      "optimal_week_ci95": [
+        11.38,
+        23.64
+      ],
+      "compliance_mean": 0.811,
+      "compliance_std": 0.1,
+      "compliance_ci95": [
+        0.625,
+        1.0
+      ],
+      "sigma_meas": 0.010096
+    },
+    {
+      "group": "[40,+inf)",
+      "optimal_week_mean": 16.15,
+      "optimal_week_std": 4.75,
+      "optimal_week_ci95": [
+        11.0,
+        24.58
+      ],
+      "compliance_mean": 0.88,
+      "compliance_std": 0.162,
+      "compliance_ci95": [
+        0.5,
+        1.0
+      ],
+      "sigma_meas": 0.010096
+    }
+  ]
+}

@@ -1,0 +1,283 @@
+{
+  "question": "Q1",
+  "robustness_checks": [
+    {
+      "check": "spline_df_sensitivity",
+      "claim": "GAMM with gw_df=4, bmi_df=3 is near-optimal among tested configurations",
+      "perturbation": "gw_df in {3,4,5}, bmi_df in {2,3,4}",
+      "results": [
+        {
+          "AIC": -5249.78,
+          "BIC": -5194.93,
+          "RMSE": 0.010103,
+          "MAE": 0.00704,
+          "log_likelihood": 2635.89,
+          "gw_df": 3,
+          "bmi_df": 3,
+          "converged": true,
+          "n_fe": 7,
+          "intercept": 0.012977
+        },
+        {
+          "AIC": -5240.96,
+          "BIC": -5181.12,
+          "RMSE": 0.010102,
+          "MAE": 0.007038,
+          "log_likelihood": 2632.48,
+          "gw_df": 3,
+          "bmi_df": 4,
+          "converged": true,
+          "n_fe": 8,
+          "intercept": 0.013262
+        },
+        {
+          "AIC": -5232.73,
+          "BIC": -5167.91,
+          "RMSE": 0.010102,
+          "MAE": 0.007041,
+          "log_likelihood": 2629.37,
+          "gw_df": 3,
+          "bmi_df": 5,
+          "converged": true,
+          "n_fe": 9,
+          "intercept": 0.013225
+        },
+        {
+          "AIC": -5240.8,
+          "BIC": -5180.96,
+          "RMSE": 0.010079,
+          "MAE": 0.007039,
+          "log_likelihood": 2632.4,
+          "gw_df": 4,
+          "bmi_df": 3,
+          "converged": true,
+          "n_fe": 8,
+          "intercept": 0.010657
+        },
+        {
+          "AIC": -5231.98,
+          "BIC": -5167.15,
+          "RMSE": 0.010078,
+          "MAE": 0.007038,
+          "log_likelihood": 2628.99,
+          "gw_df": 4,
+          "bmi_df": 4,
+          "converged": true,
+          "n_fe": 9,
+          "intercept": 0.009732
+        },
+        {
+          "AIC": -5223.84,
+          "BIC": -5154.02,
+          "RMSE": 0.010078,
+          "MAE": 0.007042,
+          "log_likelihood": 2625.92,
+          "gw_df": 4,
+          "bmi_df": 5,
+          "converged": true,
+          "n_fe": 10,
+          "intercept": 0.009296
+        },
+        {
+          "AIC": -5230.6,
+          "BIC": -5165.77,
+          "RMSE": 0.010102,
+          "MAE": 0.00706,
+          "log_likelihood": 2628.3,
+          "gw_df": 5,
+          "bmi_df": 3,
+          "converged": true,
+          "n_fe": 9,
+          "intercept": 0.0124
+        },
+        {
+          "AIC": -5221.78,
+          "BIC": -5151.96,
+          "RMSE": 0.010101,
+          "MAE": 0.007059,
+          "log_likelihood": 2624.89,
+          "gw_df": 5,
+          "bmi_df": 4,
+          "converged": true,
+          "n_fe": 10,
+          "intercept": 0.011113
+        },
+        {
+          "AIC": -5213.64,
+          "BIC": -5138.84,
+          "RMSE": 0.010101,
+          "MAE": 0.007061,
+          "log_likelihood": 2621.82,
+          "gw_df": 5,
+          "bmi_df": 5,
+          "converged": true,
+          "n_fe": 11,
+          "intercept": 0.010645
+        }
+      ],
+      "reference_aic": -5240.8,
+      "aic_range": [
+        -5249.78,
+        -5213.64
+      ],
+      "status": "CONDITIONAL",
+      "limitation": "Only integer df tested; fractional or penalized alternatives not compared"
+    },
+    {
+      "check": "random_effects_structure",
+      "claim": "Random intercept+slope structure improves fit over intercept-only",
+      "perturbation": "RE formula: ~1 vs ~gest_week",
+      "results": [
+        {
+          "AIC": -5029.5,
+          "BIC": -4979.63,
+          "RMSE": 0.014744,
+          "MAE": 0.010557,
+          "log_likelihood": 2524.75,
+          "re_structure": "intercept_only",
+          "converged": true,
+          "re_variance": {
+            "intercept": 0.000803
+          }
+        },
+        {
+          "AIC": -5240.8,
+          "BIC": -5180.96,
+          "RMSE": 0.010079,
+          "MAE": 0.007039,
+          "log_likelihood": 2632.4,
+          "re_structure": "intercept_slope",
+          "converged": true,
+          "re_variance": {
+            "intercept": 0.001886,
+            "gest_week": 8e-06
+          }
+        }
+      ],
+      "status": "PASS",
+      "limitation": "Only two RE structures tested; more complex structures not explored"
+    },
+    {
+      "check": "outlier_influence",
+      "claim": "Results are not dominated by a few influential observations",
+      "perturbation": "Remove top 5% by Cook's distance approximation",
+      "results": {
+        "criterion": "|standardized_residual| > 2",
+        "n_influential": 62,
+        "pct_influential": 5.73,
+        "trimmed": {
+          "n_rows": 1020,
+          "metrics": {
+            "AIC": -5464.83,
+            "BIC": -5405.7,
+            "RMSE": 0.006267,
+            "MAE": 0.00481,
+            "log_likelihood": 2744.42
+          }
+        },
+        "coefficient_changes": {
+          "Intercept": {
+            "original": 0.010657,
+            "trimmed": 0.00358,
+            "pct_change": 66.41
+          },
+          "gw_s0": {
+            "original": 0.015308,
+            "trimmed": 0.010232,
+            "pct_change": 33.16
+          },
+          "gw_s1": {
+            "original": 0.017306,
+            "trimmed": 0.020095,
+            "pct_change": 16.12
+          },
+          "gw_s2": {
+            "original": 0.043438,
+            "trimmed": 0.042896,
+            "pct_change": 1.25
+          },
+          "gw_s3": {
+            "original": 0.123841,
+            "trimmed": 0.116702,
+            "pct_change": 5.76
+          },
+          "bmi_s0": {
+            "original": 0.102257,
+            "trimmed": 0.105332,
+            "pct_change": 3.01
+          },
+          "bmi_s1": {
+            "original": 0.012716,
+            "trimmed": 0.031919,
+            "pct_change": 151.02
+          },
+          "bmi_s2": {
+            "original": 0.015014,
+            "trimmed": 0.032159,
+            "pct_change": 114.2
+          }
+        },
+        "max_coef_pct_change": 151.02
+      },
+      "status": "CONDITIONAL",
+      "limitation": "Cook's distance is approximated without exact hat matrix for mixed models"
+    },
+    {
+      "check": "patient_level_cv",
+      "claim": "GAMM generalizes across held-out patients",
+      "perturbation": "5-fold patient-level CV",
+      "results": [
+        {
+          "fold": 0,
+          "n_train_patients": 874,
+          "n_test_patients": 54,
+          "n_test_obs": 208,
+          "RMSE": 0.035484,
+          "MAE": 0.028438
+        },
+        {
+          "fold": 1,
+          "n_train_patients": 857,
+          "n_test_patients": 54,
+          "n_test_obs": 225,
+          "RMSE": 0.035497,
+          "MAE": 0.028304
+        },
+        {
+          "fold": 2,
+          "n_train_patients": 863,
+          "n_test_patients": 53,
+          "n_test_obs": 219,
+          "RMSE": 0.036231,
+          "MAE": 0.030435
+        },
+        {
+          "fold": 3,
+          "n_train_patients": 868,
+          "n_test_patients": 53,
+          "n_test_obs": 214,
+          "RMSE": 0.032758,
+          "MAE": 0.028013
+        },
+        {
+          "fold": 4,
+          "n_train_patients": 866,
+          "n_test_patients": 53,
+          "n_test_obs": 216,
+          "RMSE": 0.031343,
+          "MAE": 0.025383
+        }
+      ],
+      "cv_mean_rmse": 0.034263,
+      "cv_std_rmse": 0.00188,
+      "cv_mean_mae": 0.028115,
+      "status": "PASS",
+      "limitation": "CV uses population-average prediction (no RE for new patients)"
+    }
+  ],
+  "seed": 42,
+  "figures": [
+    "q1_spline_df_sensitivity.png",
+    "q1_cv_rmse.png"
+  ]
+}

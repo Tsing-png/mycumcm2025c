@@ -1,0 +1,52 @@
+{
+  "question": "Q2",
+  "probe_date": "2026-09-03",
+  "methods_probed": [
+    {
+      "id": "M1",
+      "role": "main_candidate",
+      "name": "GAMM预测达标时间 + 连续风险函数优化 + 变点BMI分组",
+      "executability": {
+        "verdict": "PASS",
+        "evidence": "复用 Q1 已验证 GAMM（converged, AIC=-5240.8）；风险函数为解析形式可直接求最优；变点检测用 ruptures 或分段回归"
+      },
+      "data_coverage": {
+        "verdict": "CONDITIONAL",
+        "evidence": "总 1082 条 267 人；BMI 范围 [20.7, 46.9]；极端组样本少：BMI<24 仅 3 人，BMI>=40 仅 8 人（18 条）；主体集中在 [28,36)（280 人）",
+        "mitigation": "极端组合并或标注置信区间；不外推超出数据范围"
+      },
+      "assumption_checks": {
+        "gamm_validity": "Q1 probe 通过，残差 skew=0.12，ICC=0.60",
+        "risk_function_form": "sigmoid 型风险函数假设需检验——通过与分段线性风险对比验证鲁棒性",
+        "threshold_4pct": "题目硬约束，不需验证"
+      },
+      "output_degeneracy": {
+        "verdict": "PASS",
+        "evidence": "风险函数在 [10,25] 周区间连续单峰（先降后升），优化有唯一解；不同 BMI 的达标时间预测值分散度由 GAMM BMI 样条系数保证"
+      },
+      "perturbation_sensitivity": {
+        "verdict": "TO_TEST",
+        "evidence": "检测误差敏感性是题目要求的核心输出，将在实验中系统测试（浓度误差 ±0.5%、±1%、±2%）"
+      },
+      "scale_check": {
+        "verdict": "PASS",
+        "evidence": "GAMM 预测 + 1D 优化，预计 <5s"
+      },
+      "verdict": "CONDITIONAL",
+      "conditions": ["极端 BMI 组需合并或标注不确定性", "风险函数形式需与替代形式对比"],
+      "fallback_trigger": "GAMM 外推达标时间 <8w 或 >30w，或变点检测无有意义断点"
+    },
+    {
+      "id": "M2",
+      "role": "usable_baseline",
+      "name": "临床经验BMI分组 + 组内统计",
+      "executability": {"verdict": "PASS", "evidence": "纯统计描述，无收敛问题"},
+      "data_coverage": {"verdict": "CONDITIONAL", "evidence": "同 M1，极端组样本少"},
+      "assumption_checks": {"none_required": true},
+      "output_degeneracy": {"verdict": "PASS", "evidence": "输出为组内中位数/分位数，有自然变异"},
+      "perturbation_sensitivity": {"verdict": "N/A"},
+      "scale_check": {"verdict": "PASS", "evidence": "<1s"},
+      "verdict": "PASS"
+    }
+  ]
+}

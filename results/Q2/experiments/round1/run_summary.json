@@ -1,0 +1,202 @@
+{
+  "question": "Q2",
+  "round": 1,
+  "decision_id": "q2_method_choice",
+  "methods": [
+    {
+      "id": "M1",
+      "role": "main_candidate",
+      "name": "GAMM连续预测 + 经验达标时间回归 + 风险函数优化 + 数据驱动BMI分组",
+      "status": "completed",
+      "time_s": 51.93,
+      "key_results": {
+        "n_groups": 3,
+        "breakpoints": [
+          30.0,
+          36.0
+        ],
+        "groups": [
+          {
+            "group": "G1: [20.7, 30.0)",
+            "bmi_lo": 20.7,
+            "bmi_hi": 30.0,
+            "n_patients": 76,
+            "n_reached_threshold": 76,
+            "bmi_mean": 28.9,
+            "empirical_threshold_median_week": 12.79,
+            "empirical_threshold_mean_week": 13.52,
+            "optimal_nipt_week": 11.72,
+            "min_total_risk": 0.0208,
+            "risk_delay_at_opt": 0.0415,
+            "risk_inaccuracy_at_opt": 0.007
+          },
+          {
+            "group": "G2: [30.0, 36.0)",
+            "bmi_lo": 30.0,
+            "bmi_hi": 36.0,
+            "n_patients": 171,
+            "n_reached_threshold": 165,
+            "bmi_mean": 32.3,
+            "empirical_threshold_median_week": 12.71,
+            "empirical_threshold_mean_week": 13.32,
+            "optimal_nipt_week": 11.8,
+            "min_total_risk": 0.0218,
+            "risk_delay_at_opt": 0.043,
+            "risk_inaccuracy_at_opt": 0.0076
+          },
+          {
+            "group": "G3: [36.0, 46.9)",
+            "bmi_lo": 36.0,
+            "bmi_hi": 46.9,
+            "n_patients": 20,
+            "n_reached_threshold": 19,
+            "bmi_mean": 38.4,
+            "empirical_threshold_median_week": 16.0,
+            "empirical_threshold_mean_week": 16.39,
+            "optimal_nipt_week": 13.49,
+            "min_total_risk": 0.0675,
+            "risk_delay_at_opt": 0.095,
+            "risk_inaccuracy_at_opt": 0.0492
+          }
+        ]
+      }
+    },
+    {
+      "id": "M2",
+      "role": "usable_baseline",
+      "name": "临床经验BMI分组 + 组内统计",
+      "status": "completed",
+      "key_results": {
+        "groups": [
+          {
+            "group": "[20,28)",
+            "bmi_lo": 20,
+            "bmi_hi": 28,
+            "n_patients": 5,
+            "n_reached_threshold": 5,
+            "bmi_mean": 26.2,
+            "empirical_threshold_median_week": 12.71,
+            "optimal_nipt_week": 12.4,
+            "min_total_risk": 0.0314
+          },
+          {
+            "group": "[28,32)",
+            "bmi_lo": 28,
+            "bmi_hi": 32,
+            "n_patients": 147,
+            "n_reached_threshold": 145,
+            "bmi_mean": 30.0,
+            "empirical_threshold_median_week": 12.71,
+            "optimal_nipt_week": 11.65,
+            "min_total_risk": 0.02
+          },
+          {
+            "group": "[32,36)",
+            "bmi_lo": 32,
+            "bmi_hi": 36,
+            "n_patients": 95,
+            "n_reached_threshold": 91,
+            "bmi_mean": 33.6,
+            "empirical_threshold_median_week": 12.86,
+            "optimal_nipt_week": 12.01,
+            "min_total_risk": 0.0247
+          },
+          {
+            "group": "[36,40)",
+            "bmi_lo": 36,
+            "bmi_hi": 40,
+            "n_patients": 16,
+            "n_reached_threshold": 16,
+            "bmi_mean": 37.7,
+            "empirical_threshold_median_week": 15.79,
+            "optimal_nipt_week": 13.24,
+            "min_total_risk": 0.0558
+          },
+          {
+            "group": ">=40",
+            "bmi_lo": 40,
+            "bmi_hi": 50,
+            "n_patients": 4,
+            "n_reached_threshold": 3,
+            "bmi_mean": 42.1,
+            "empirical_threshold_median_week": 19.57,
+            "optimal_nipt_week": 14.65,
+            "min_total_risk": 0.1862
+          }
+        ]
+      }
+    }
+  ],
+  "risk_function": {
+    "type": "weighted_sum",
+    "components": [
+      "sigmoid_delay_risk",
+      "normal_cdf_inaccuracy_risk"
+    ],
+    "weights": {
+      "w_delay": 0.4,
+      "w_inaccuracy": 0.6
+    },
+    "design": "decisional (risk enters objective, not post-hoc report)"
+  },
+  "error_sensitivity": {
+    "threshold_shift_tested_pct": [
+      0,
+      0.5,
+      1.0,
+      2.0
+    ],
+    "noise_multipliers_tested": [
+      1.0,
+      1.5,
+      2.0,
+      3.0
+    ]
+  },
+  "seed": 42,
+  "n_obs": 1082,
+  "n_patients": 267,
+  "environment": {
+    "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "statsmodels": "0.14.6",
+    "numpy": "2.5.1",
+    "pandas": "3.0.3"
+  },
+  "inputs": [
+    "C:\\Users\\HUAWEI\\mycumcm2025c\\workspace\\data_clean\\male_cleaned.csv"
+  ],
+  "outputs": {
+    "figures": [
+      "M1_threshold_time_vs_bmi.png",
+      "M1_risk_function_analysis.png",
+      "M1_error_sensitivity.png",
+      "M1_conc_curves_by_group.png",
+      "M1_vs_M2_comparison.png"
+    ],
+    "tables": [
+      "M1_group_results.csv",
+      "M2_baseline_results.csv",
+      "error_sensitivity.csv"
+    ],
+    "metrics": [
+      "q2_metrics.json"
+    ]
+  },
+  "degeneracy_check": {
+    "unique_optimal_times": 216,
+    "risk_range": [
+      0.02,
+      0.3837
+    ]
+  },
+  "fallback_trigger": {
+    "triggered": false,
+    "criteria": "T* < 8w or T* > 30w, or no valid breakpoints found",
+    "t_star_range": [
+      12.67,
+      23.16
+    ]
+  },
+  "warnings": [],
+  "errors": []
+}

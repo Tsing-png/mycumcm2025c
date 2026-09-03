@@ -1,0 +1,421 @@
+{
+  "method": "M2_z_value_threshold_rules",
+  "strategies": {
+    "absolute_any": {
+      "best": {
+        "recall": 0.4925,
+        "precision": 0.0994,
+        "f1": 0.1654,
+        "tp": 33,
+        "fp": 299,
+        "fn": 34,
+        "tn": 239,
+        "fpr": 0.5558,
+        "n_flagged": 332,
+        "threshold": 1.5,
+        "strategy": "abs_any"
+      },
+      "all": [
+        {
+          "recall": 0.4925,
+          "precision": 0.0994,
+          "f1": 0.1654,
+          "tp": 33,
+          "fp": 299,
+          "fn": 34,
+          "tn": 239,
+          "fpr": 0.5558,
+          "n_flagged": 332,
+          "threshold": 1.5,
+          "strategy": "abs_any"
+        },
+        {
+          "recall": 0.2836,
+          "precision": 0.1033,
+          "f1": 0.1514,
+          "tp": 19,
+          "fp": 165,
+          "fn": 48,
+          "tn": 373,
+          "fpr": 0.3067,
+          "n_flagged": 184,
+          "threshold": 2.0,
+          "strategy": "abs_any"
+        },
+        {
+          "recall": 0.1791,
+          "precision": 0.1348,
+          "f1": 0.1538,
+          "tp": 12,
+          "fp": 77,
+          "fn": 55,
+          "tn": 461,
+          "fpr": 0.1431,
+          "n_flagged": 89,
+          "threshold": 2.5,
+          "strategy": "abs_any"
+        },
+        {
+          "recall": 0.0597,
+          "precision": 0.0889,
+          "f1": 0.0714,
+          "tp": 4,
+          "fp": 41,
+          "fn": 63,
+          "tn": 497,
+          "fpr": 0.0762,
+          "n_flagged": 45,
+          "threshold": 3.0,
+          "strategy": "abs_any"
+        },
+        {
+          "recall": 0.0299,
+          "precision": 0.0769,
+          "f1": 0.043,
+          "tp": 2,
+          "fp": 24,
+          "fn": 65,
+          "tn": 514,
+          "fpr": 0.0446,
+          "n_flagged": 26,
+          "threshold": 3.5,
+          "strategy": "abs_any"
+        }
+      ]
+    },
+    "directional_any": {
+      "best": {
+        "recall": 0.597,
+        "precision": 0.1133,
+        "f1": 0.1905,
+        "tp": 40,
+        "fp": 313,
+        "fn": 27,
+        "tn": 225,
+        "fpr": 0.5818,
+        "n_flagged": 353,
+        "threshold": 1.0,
+        "strategy": "directional_any"
+      },
+      "all": [
+        {
+          "recall": 0.597,
+          "precision": 0.1133,
+          "f1": 0.1905,
+          "tp": 40,
+          "fp": 313,
+          "fn": 27,
+          "tn": 225,
+          "fpr": 0.5818,
+          "n_flagged": 353,
+          "threshold": 1.0,
+          "strategy": "directional_any"
+        },
+        {
+          "recall": 0.3731,
+          "precision": 0.1012,
+          "f1": 0.1592,
+          "tp": 25,
+          "fp": 222,
+          "fn": 42,
+          "tn": 316,
+          "fpr": 0.4126,
+          "n_flagged": 247,
+          "threshold": 1.5,
+          "strategy": "directional_any"
+        },
+        {
+          "recall": 0.209,
+          "precision": 0.0959,
+          "f1": 0.1315,
+          "tp": 14,
+          "fp": 132,
+          "fn": 53,
+          "tn": 406,
+          "fpr": 0.2454,
+          "n_flagged": 146,
+          "threshold": 2.0,
+          "strategy": "directional_any"
+        },
+        {
+          "recall": 0.1194,
+          "precision": 0.1111,
+          "f1": 0.1151,
+          "tp": 8,
+          "fp": 64,
+          "fn": 59,
+          "tn": 474,
+          "fpr": 0.119,
+          "n_flagged": 72,
+          "threshold": 2.5,
+          "strategy": "directional_any"
+        },
+        {
+          "recall": 0.0448,
+          "precision": 0.0714,
+          "f1": 0.055,
+          "tp": 3,
+          "fp": 39,
+          "fn": 64,
+          "tn": 499,
+          "fpr": 0.0725,
+          "n_flagged": 42,
+          "threshold": 3.0,
+          "strategy": "directional_any"
+        }
+      ]
+    },
+    "absolute_any_with_X": {
+      "best": {
+        "recall": 0.5373,
+        "precision": 0.1,
+        "f1": 0.1686,
+        "tp": 36,
+        "fp": 324,
+        "fn": 31,
+        "tn": 214,
+        "fpr": 0.6022,
+        "n_flagged": 360,
+        "threshold": 1.5,
+        "strategy": "abs_any_with_X"
+      },
+      "all": [
+        {
+          "recall": 0.5373,
+          "precision": 0.1,
+          "f1": 0.1686,
+          "tp": 36,
+          "fp": 324,
+          "fn": 31,
+          "tn": 214,
+          "fpr": 0.6022,
+          "n_flagged": 360,
+          "threshold": 1.5,
+          "strategy": "abs_any_with_X"
+        },
+        {
+          "recall": 0.2836,
+          "precision": 0.095,
+          "f1": 0.1423,
+          "tp": 19,
+          "fp": 181,
+          "fn": 48,
+          "tn": 357,
+          "fpr": 0.3364,
+          "n_flagged": 200,
+          "threshold": 2.0,
+          "strategy": "abs_any_with_X"
+        },
+        {
+          "recall": 0.194,
+          "precision": 0.1262,
+          "f1": 0.1529,
+          "tp": 13,
+          "fp": 90,
+          "fn": 54,
+          "tn": 448,
+          "fpr": 0.1673,
+          "n_flagged": 103,
+          "threshold": 2.5,
+          "strategy": "abs_any_with_X"
+        },
+        {
+          "recall": 0.0746,
+          "precision": 0.098,
+          "f1": 0.0847,
+          "tp": 5,
+          "fp": 46,
+          "fn": 62,
+          "tn": 492,
+          "fpr": 0.0855,
+          "n_flagged": 51,
+          "threshold": 3.0,
+          "strategy": "abs_any_with_X"
+        },
+        {
+          "recall": 0.0448,
+          "precision": 0.1034,
+          "f1": 0.0625,
+          "tp": 3,
+          "fp": 26,
+          "fn": 64,
+          "tn": 512,
+          "fpr": 0.0483,
+          "n_flagged": 29,
+          "threshold": 3.5,
+          "strategy": "abs_any_with_X"
+        }
+      ]
+    },
+    "z_squared_sum": {
+      "best": {
+        "recall": 0.4776,
+        "precision": 0.1063,
+        "f1": 0.1739,
+        "tp": 32,
+        "fp": 269,
+        "fn": 35,
+        "tn": 269,
+        "fpr": 0.5,
+        "n_flagged": 301,
+        "threshold": 3.7766,
+        "threshold_type": "p50",
+        "strategy": "z_squared_sum"
+      },
+      "all": [
+        {
+          "recall": 0.4776,
+          "precision": 0.1063,
+          "f1": 0.1739,
+          "tp": 32,
+          "fp": 269,
+          "fn": 35,
+          "tn": 269,
+          "fpr": 0.5,
+          "n_flagged": 301,
+          "threshold": 3.7766,
+          "threshold_type": "p50",
+          "strategy": "z_squared_sum"
+        },
+        {
+          "recall": 0.2388,
+          "precision": 0.106,
+          "f1": 0.1468,
+          "tp": 16,
+          "fp": 135,
+          "fn": 51,
+          "tn": 403,
+          "fpr": 0.2509,
+          "n_flagged": 151,
+          "threshold": 6.5292,
+          "threshold_type": "p75",
+          "strategy": "z_squared_sum"
+        },
+        {
+          "recall": 0.209,
+          "precision": 0.1148,
+          "f1": 0.1481,
+          "tp": 14,
+          "fp": 108,
+          "fn": 53,
+          "tn": 430,
+          "fpr": 0.2007,
+          "n_flagged": 122,
+          "threshold": 7.6119,
+          "threshold_type": "p80",
+          "strategy": "z_squared_sum"
+        },
+        {
+          "recall": 0.194,
+          "precision": 0.1383,
+          "f1": 0.1615,
+          "tp": 13,
+          "fp": 81,
+          "fn": 54,
+          "tn": 457,
+          "fpr": 0.1506,
+          "n_flagged": 94,
+          "threshold": 9.0445,
+          "threshold_type": "p85",
+          "strategy": "z_squared_sum"
+        },
+        {
+          "recall": 0.1045,
+          "precision": 0.1148,
+          "f1": 0.1094,
+          "tp": 7,
+          "fp": 54,
+          "fn": 60,
+          "tn": 484,
+          "fpr": 0.1004,
+          "n_flagged": 61,
+          "threshold": 11.7161,
+          "threshold_type": "p90",
+          "strategy": "z_squared_sum"
+        },
+        {
+          "recall": 0.0299,
+          "precision": 0.069,
+          "f1": 0.0417,
+          "tp": 2,
+          "fp": 27,
+          "fn": 65,
+          "tn": 511,
+          "fpr": 0.0502,
+          "n_flagged": 29,
+          "threshold": 16.6929,
+          "threshold_type": "p95",
+          "strategy": "z_squared_sum"
+        },
+        {
+          "recall": 0.0149,
+          "precision": 0.0556,
+          "f1": 0.0235,
+          "tp": 1,
+          "fp": 17,
+          "fn": 66,
+          "tn": 521,
+          "fpr": 0.0316,
+          "n_flagged": 18,
+          "threshold": 21.8966,
+          "threshold_type": "p97",
+          "strategy": "z_squared_sum"
+        },
+        {
+          "recall": 0.0,
+          "precision": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 6,
+          "fn": 67,
+          "tn": 532,
+          "fpr": 0.0112,
+          "n_flagged": 6,
+          "threshold": 32.528,
+          "threshold_type": "p99",
+          "strategy": "z_squared_sum"
+        }
+      ]
+    }
+  },
+  "per_chromosome": {
+    "13号Z值": {
+      "recall": 0.1493,
+      "precision": 0.1235,
+      "f1": 0.1351,
+      "tp": 10,
+      "fp": 71,
+      "fn": 57,
+      "tn": 467,
+      "fpr": 0.132,
+      "n_flagged": 81,
+      "chromosome": "13号Z值"
+    },
+    "18号Z值": {
+      "recall": 0.1343,
+      "precision": 0.0865,
+      "f1": 0.1053,
+      "tp": 9,
+      "fp": 95,
+      "fn": 58,
+      "tn": 443,
+      "fpr": 0.1766,
+      "n_flagged": 104,
+      "chromosome": "18号Z值"
+    },
+    "21号Z值": {
+      "recall": 0.0896,
+      "precision": 0.125,
+      "f1": 0.1043,
+      "tp": 6,
+      "fp": 42,
+      "fn": 61,
+      "tn": 496,
+      "fpr": 0.0781,
+      "n_flagged": 48,
+      "chromosome": "21号Z值"
+    }
+  },
+  "auc_roc_z2sum": 0.492,
+  "auc_roc_z2sum_x": 0.473
+}
