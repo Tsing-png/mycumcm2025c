@@ -237,6 +237,7 @@ Transcribe these from the decision ledger with provenance. If absent, invoke a c
 
 - 摘要独立一页（含标题+关键词），原则上不超一页；页码从摘要页「1」开始、位于页脚中部。关键词紧跟摘要正文，不另起一页。
 - **禁止加目录**（不使用 \tableofcontents、\newpage 分隔摘要与正文）。正文不超过 30 页；附录页数不限。
+- **禁止修改行间距、字号、页边距等模板排版参数**（不修改 baselinestretch、fontsize、geometry 等）。如果摘要放不下一页，通过精简文字解决，不改排版参数。
 - 电子版第一页必须为摘要专用页（不含承诺书/编号页），使用 withoutpreface 选项；PDF/Word 单文件 ≤20MB；不压缩。
 - 附录含支撑材料文件列表 + 全部完整可运行源程序；无程序则注明「本论文没有用到程序」。
 - 摘要页、正文、附录均不出现参赛者身份/学校/赛区信息。
