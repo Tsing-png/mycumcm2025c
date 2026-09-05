@@ -686,4 +686,32 @@ Wang E, Batey A, Struble C, et al. Gestational age and maternal weight effects o
 
 \end{thebibliography}
 
+%% ==================== 附录 ====================
+\newpage
+\appendix
+\section{支撑材料文件清单}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lp{28em}}
+\toprule
+文件名 & 说明 \\
+\midrule
+code/Q1/q1\_main.py & 问题一GAMM与LME建模主程序 \\
+code/Q1/q1\_robustness.py & 问题一鲁棒性分析（样条自由度、交叉验证） \\
+code/Q2/q2\_main.py & 问题二BMI分组与最优NIPT时点优化主程序 \\
+code/Q2/q2\_robustness.py & 问题二鲁棒性分析（断点、权重、阈值敏感性） \\
+code/Q3/q3\_main.py & 问题三多因素GAMM与Monte Carlo误差传播主程序 \\
+code/Q3/q3\_robustness.py & 问题三鲁棒性分析（MC收敛、分解稳定性） \\
+code/Q4/q4\_main.py & 问题四马氏距离异常检测主程序 \\
+code/Q4/q4\_baseline.py & 问题四Z值阈值基线方法 \\
+code/Q4/q4\_robustness.py & 问题四鲁棒性分析（特征子集、阈值、留一验证） \\
+code/Q4/run\_all.py & 问题四M1与M2对比运行脚本 \\
+workspace/data\_raw/附件.xlsx & 原始数据（题目附件） \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+以上所有Python程序均可独立运行，随机种子统一设为42，保证结果可复现。
+
 \end{document}
